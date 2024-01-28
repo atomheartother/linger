@@ -18,7 +18,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         backgroundColor: colors.background,
       }}>
       {songs.map(song => (
-        <FileDetails key={song.path} song={song} />
+        <FileDetails key={song.uri} song={song} />
       ))}
     </View>
   );

@@ -7,11 +7,11 @@ import React, {
   useState,
 } from 'react';
 import {useSettings} from './settingsContext';
-import {AndroidScoped, FileSystem} from 'react-native-file-access';
+import {AndroidScoped, FileStat, FileSystem} from 'react-native-file-access';
 
 export type MusicInfo = {
   filename: string;
-  path: string;
+  uri: string;
 };
 
 type SongsData = {
@@ -34,11 +34,12 @@ export const SongsContextProvider: React.FC<PropsWithChildren> = ({
       }
 
       const files = await FileSystem.ls(dirUri);
-      const paths = files.map(f => AndroidScoped.appendPath(dirUri, f));
+      const uris = files.map(f => AndroidScoped.appendPath(dirUri, f));
+
       setAllSongs(
         files.map((f, i) => ({
           filename: f,
-          path: paths[i],
+          uri: uris[i],
         })),
       );
     };
