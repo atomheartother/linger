@@ -7,16 +7,16 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {Dirs, FileSystem} from 'react-native-file-access';
 import TrackPlayer, {
   AppKilledPlaybackBehavior,
   Capability,
   RepeatMode,
-  State,
 } from 'react-native-track-player';
+import {MusicInfo} from './songsContext';
 
 type TrackPlayerData = {
-  addSong: (name: string, uri: string) => void;
+  playSong: (song: MusicInfo) => void;
+  addSong: (song: MusicInfo) => void;
 };
 
 export const TrackPlayerContext = createContext<TrackPlayerData | undefined>(
@@ -47,48 +47,37 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
   }, []);
 
   const addSong = useCallback(
-    async (name: string, path: string) => {
+    async (song: MusicInfo) => {
       if (!ready) {
         return;
       }
-      const exists = await FileSystem.exists(path);
-      if (!exists) {
-        console.error(`${path} does not exist`);
-        return;
-      }
       await TrackPlayer.add({
-        title: name,
-        url: path,
+        title: song.filename,
+        url: song.path,
         artist: 'unknown',
       });
-      TrackPlayer.play();
     },
     [ready],
   );
 
-  useEffect(() => {
-    const checkState = async () => {
-      const pbState = await TrackPlayer.getPlaybackState();
-      if (pbState.state === State.Error) {
-        console.error(pbState.error);
-        TrackPlayer.reset();
+  const playSong = useCallback(
+    async (song: MusicInfo) => {
+      if (!ready) {
+        return;
       }
-    };
-    if (!ready) {
-      console.log('Player is not ready.');
-      return;
-    }
-    const intervalId = setInterval(checkState, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [ready]);
+      await TrackPlayer.reset();
+      await addSong(song);
+      TrackPlayer.play();
+    },
+    [ready, addSong],
+  );
 
   const data = useMemo(
     () => ({
       addSong,
+      playSong,
     }),
-    [addSong],
+    [addSong, playSong],
   );
 
   return (

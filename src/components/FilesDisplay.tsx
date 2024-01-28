@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import FileDetails from './FileDetails';
+import { MusicInfo } from '../context/songsContext';
 
 type Props = {
-  dirUri: string;
-  files: string[];
+  songs: MusicInfo[];
 };
 
-const FilesDisplay: React.FC<Props> = ({dirUri, files}) => {
+const FilesDisplay: React.FC<Props> = ({songs}) => {
   const {colors} = useTheme();
 
   return (
@@ -17,8 +17,8 @@ const FilesDisplay: React.FC<Props> = ({dirUri, files}) => {
         flex: 1,
         backgroundColor: colors.background,
       }}>
-      {files.map(file => (
-        <FileDetails key={file} dir={dirUri} name={file} />
+      {songs.map(song => (
+        <FileDetails key={song.path} song={song} />
       ))}
     </View>
   );

@@ -3,23 +3,13 @@ import {useTheme} from '@react-navigation/native';
 import {useSettings} from '../context/settingsContext';
 import {View, Text, Button, ScrollView} from 'react-native';
 import FilesDisplay from '../components/FilesDisplay';
-import {FileSystem} from 'react-native-file-access';
+import { useSongs } from '../context/songsContext';
 
 const Home: React.FC = () => {
   const {colors} = useTheme();
   const {dirUri, promptForDir} = useSettings();
-  const [files, setFiles] = useState<string[]>([]);
+  const { allSongs } = useSongs();
 
-  useEffect(() => {
-    const listFiles = async () => {
-      if (!dirUri) {
-        return;
-      }
-      const lsRes = await FileSystem.ls(dirUri);
-      setFiles(lsRes);
-    };
-    listFiles();
-  }, [dirUri]);
   if (!dirUri) {
     return (
       <View
@@ -38,7 +28,7 @@ const Home: React.FC = () => {
       </View>
     );
   }
-  if (files.length === 0) {
+  if (allSongs.length === 0) {
     return (
       <View
         style={{
@@ -56,7 +46,7 @@ const Home: React.FC = () => {
   }
   return (
     <ScrollView>
-      <FilesDisplay files={files} dirUri={dirUri} />
+      <FilesDisplay songs={allSongs} />
     </ScrollView>
   );
 };
