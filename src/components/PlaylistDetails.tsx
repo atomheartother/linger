@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableNativeFeedback} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {Playlist} from '../context/playlistsContext';
 
@@ -11,7 +11,7 @@ type Props = {
 const PlaylistDetails: React.FC<Props> = ({playlist, navigate}) => {
   const {colors} = useTheme();
   return (
-    <TouchableOpacity
+    <TouchableNativeFeedback
       style={{
         padding: 10,
         backgroundColor: colors.card,
@@ -23,7 +23,7 @@ const PlaylistDetails: React.FC<Props> = ({playlist, navigate}) => {
         navigate(playlist.id);
       }}>
       <Text>{playlist.name}</Text>
-    </TouchableOpacity>
+    </TouchableNativeFeedback>
   );
 };
 
