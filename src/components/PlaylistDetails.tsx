@@ -1,15 +1,14 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import {useTrackPlayer} from '../context/playerContext';
 import {useTheme} from '@react-navigation/native';
-import {MusicInfo} from '../context/songsContext';
+import {Playlist} from '../context/playlistsContext';
 
 type Props = {
-  song: MusicInfo;
+  playlist: Playlist;
+  navigate: (id: number) => void;
 };
 
-const FileDetails: React.FC<Props> = ({song}) => {
-  const {playSong} = useTrackPlayer();
+const PlaylistDetails: React.FC<Props> = ({playlist, navigate}) => {
   const {colors} = useTheme();
   return (
     <TouchableOpacity
@@ -21,11 +20,11 @@ const FileDetails: React.FC<Props> = ({song}) => {
         marginTop: 5,
       }}
       onPress={() => {
-        playSong(song);
+        navigate(playlist.id);
       }}>
-      <Text>{song.filename}</Text>
+      <Text>{playlist.name}</Text>
     </TouchableOpacity>
   );
 };
 
-export default FileDetails;
+export default PlaylistDetails;

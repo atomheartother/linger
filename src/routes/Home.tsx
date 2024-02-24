@@ -3,12 +3,12 @@ import {useTheme} from '@react-navigation/native';
 import {useSettings} from '../context/settingsContext';
 import {View, Text, Button, ScrollView} from 'react-native';
 import FilesDisplay from '../components/FilesDisplay';
-import { useSongs } from '../context/songsContext';
+import {useSongs} from '../context/songsContext';
 
 const Home: React.FC = () => {
   const {colors} = useTheme();
   const {dirUri, promptForDir} = useSettings();
-  const { allSongs } = useSongs();
+  const {allSongs} = useSongs();
 
   if (!dirUri) {
     return (

@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {useSettings} from './settingsContext';
-import {AndroidScoped, FileStat, FileSystem} from 'react-native-file-access';
+import {AndroidScoped, FileSystem} from 'react-native-file-access';
 
 export type MusicInfo = {
   filename: string;

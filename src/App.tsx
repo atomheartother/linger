@@ -6,6 +6,8 @@ import {SettingsContextProvider} from './context/settingsContext';
 import Home from './routes/Home';
 import {TrackPlayerContextProvider} from './context/playerContext';
 import {SongsContextProvider} from './context/songsContext';
+import Playlists from './routes/Playlists';
+import {PlaylistsContextProvider} from './context/playlistsContext';
 
 function SettingsScreen() {
   return (
@@ -22,12 +24,15 @@ function App() {
     <SettingsContextProvider>
       <SongsContextProvider>
         <TrackPlayerContextProvider>
-          <NavigationContainer theme={DarkTheme}>
-            <Tab.Navigator initialRouteName="Home">
-              <Tab.Screen name="Home" component={Home} />
-              <Tab.Screen name="Settings" component={SettingsScreen} />
-            </Tab.Navigator>
-          </NavigationContainer>
+          <PlaylistsContextProvider>
+            <NavigationContainer theme={DarkTheme}>
+              <Tab.Navigator initialRouteName="Home">
+                <Tab.Screen name="Home" component={Home} />
+                <Tab.Screen name="Playlists" component={Playlists} />
+                <Tab.Screen name="Settings" component={SettingsScreen} />
+              </Tab.Navigator>
+            </NavigationContainer>
+          </PlaylistsContextProvider>
         </TrackPlayerContextProvider>
       </SongsContextProvider>
     </SettingsContextProvider>

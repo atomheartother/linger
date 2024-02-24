@@ -53,7 +53,7 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
       }
       await TrackPlayer.add({
         title: song.filename,
-        url: song.path,
+        url: song.uri,
         artist: 'unknown',
       });
     },
