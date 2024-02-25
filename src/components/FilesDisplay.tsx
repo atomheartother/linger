@@ -29,6 +29,34 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         flexDirection: 'column',
         backgroundColor: colors.background,
       }}>
+      {selectedSongs.length > 0 && (
+        <View
+          style={{
+            backgroundColor: colors.card,
+            padding: 10,
+            display: 'flex',
+            flexDirection: 'row',
+            alignContent: 'center',
+          }}>
+          <View style={{flex: 1}}>
+            <Text style={{fontSize: 18, fontWeight: '600'}}>
+              {selectedSongs.length} selected
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignContent: 'center'
+            }}>
+            <MUIIcon name="select-all" size={24} />
+            <MUIIcon name="select-inverse" size={24} />
+            <MUIIcon name="playlist-plus" size={24} />
+          </View>
+        </View>
+      )}
       <FlatList<MusicInfo>
         data={songs}
         renderItem={({item: song}) => (
@@ -41,20 +69,6 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         )}
         style={{flex: 1}}
       />
-      {selectedSongs.length > 0 && (
-        <View
-          style={{
-            backgroundColor: colors.card,
-            padding: 10,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-          }}>
-          <MUIIcon name="select-all" size={24} />
-          <MUIIcon name="select-inverse" size={24} />
-          <MUIIcon name="playlist-plus" size={24} />
-        </View>
-      )}
     </View>
   );
 };
