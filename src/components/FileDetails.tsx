@@ -19,12 +19,6 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
   }, [song, selectedSongs]);
   return (
     <TouchableNativeFeedback
-      style={{
-        backgroundColor: colors.card,
-        borderColor: colors.border,
-        borderWidth: 1,
-        marginTop: 5,
-      }}
       onPress={() => {
         if (selectedSongs.length === 0) {
           playSong(song);
@@ -44,6 +38,8 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
           justifyContent:
             selectedSongs.length > 0 ? 'space-between' : 'flex-start',
           alignContent: 'center',
+          borderBottomColor: colors.border,
+          borderBottomWidth: 1,
         }}>
         <View
           style={{
