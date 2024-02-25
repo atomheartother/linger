@@ -3,10 +3,14 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
+import { MMKV } from 'react-native-mmkv';
 import {openDocumentTree} from 'react-native-scoped-storage';
+
+const storage = new MMKV();
 
 type SettingsData = {
   dirUri: string | null;
@@ -21,6 +25,18 @@ export const SettingsContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const [dirUri, setDirUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (storage.contains('songsDirUri')) {
+      setDirUri(storage.getString('songsDirUri') || 'error');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (dirUri !== null) {
+      storage.set('songsDirUri', dirUri);
+    }
+  }, [dirUri]);
 
   const promptForDir = useCallback(async () => {
     const pickResult = await openDocumentTree(true);

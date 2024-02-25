@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useTheme} from '@react-navigation/native';
 import {useSettings} from '../context/settingsContext';
-import {View, Text, Button, ScrollView} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import FilesDisplay from '../components/FilesDisplay';
 import {useSongs} from '../context/songsContext';
 
@@ -44,11 +44,7 @@ const Home: React.FC = () => {
       </View>
     );
   }
-  return (
-    <ScrollView>
-      <FilesDisplay songs={allSongs} />
-    </ScrollView>
-  );
+  return <FilesDisplay songs={allSongs} />;
 };
 
 export default Home;

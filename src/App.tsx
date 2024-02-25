@@ -8,6 +8,7 @@ import {TrackPlayerContextProvider} from './context/playerContext';
 import {SongsContextProvider} from './context/songsContext';
 import Playlists from './routes/Playlists';
 import {PlaylistsContextProvider} from './context/playlistsContext';
+import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function SettingsScreen() {
   return (
@@ -26,10 +27,47 @@ function App() {
         <TrackPlayerContextProvider>
           <PlaylistsContextProvider>
             <NavigationContainer theme={DarkTheme}>
-              <Tab.Navigator initialRouteName="Home">
-                <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Playlists" component={Playlists} />
-                <Tab.Screen name="Settings" component={SettingsScreen} />
+              <Tab.Navigator
+                initialRouteName="Home"
+                screenOptions={{
+                  headerShown: false,
+                }}>
+                <Tab.Screen
+                  name="Home"
+                  component={Home}
+                  options={{
+                    tabBarLabel: 'Songs',
+                    tabBarIcon: ({color, size}) => (
+                      <MUIIcon
+                        name="music-box-outline"
+                        size={size}
+                        color={color}
+                      />
+                    ),
+                  }}
+                />
+                <Tab.Screen
+                  name="Playlists"
+                  component={Playlists}
+                  options={{
+                    tabBarIcon: ({color, size}) => (
+                      <MUIIcon
+                        name="playlist-music"
+                        size={size}
+                        color={color}
+                      />
+                    ),
+                  }}
+                />
+                <Tab.Screen
+                  name="Settings"
+                  component={SettingsScreen}
+                  options={{
+                    tabBarIcon: ({color, size}) => (
+                      <MUIIcon name="cog" size={size} color={color} />
+                    ),
+                  }}
+                />
               </Tab.Navigator>
             </NavigationContainer>
           </PlaylistsContextProvider>
