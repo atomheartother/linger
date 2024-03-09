@@ -5,6 +5,7 @@ import FileDetails from './FileDetails';
 import {MusicInfo} from '../context/songsContext';
 import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Dialog from './Dialog';
+import CreatePlaylist from './CreatePlaylist';
 
 type Props = {
   songs: MusicInfo[];
@@ -97,9 +98,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         style={{flex: 1}}
       />
       <Dialog visible={openModal} onRequestClose={() => setOpenModal(false)}>
-        <View style={{backgroundColor: colors.card}}>
-          <Text>Papa poo pi</Text>
-        </View>
+        <CreatePlaylist close={() => setOpenModal(false)} />
       </Dialog>
     </View>
   );
