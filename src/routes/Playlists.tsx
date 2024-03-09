@@ -1,12 +1,15 @@
 import * as React from 'react';
-import {ScrollView, Text, View} from 'react-native';
-import {usePlaylists} from '../context/playlistsContext';
+import {ScrollView, Text, TouchableNativeFeedback, View} from 'react-native';
+import {PlaylistSong, usePlaylists} from '../context/playlistsContext';
 import {useTheme} from '@react-navigation/native';
 import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import PlaylistDetails from '../components/PlaylistDetails';
+import {FileSystem} from 'react-native-file-access';
+import {MusicInfo} from '../context/songsContext';
+import PlaylistSongDetails from '../components/PlaylistSongDetails';
 
 type PlaylistRouteParams = {
   AllPlaylists: undefined;
@@ -20,6 +23,9 @@ const PlaylistView: React.FC<
 > = ({route}) => {
   const {playlists} = usePlaylists();
   const {colors} = useTheme();
+  const [songData, setSongData] = React.useState<(MusicInfo & PlaylistSong)[]>(
+    [],
+  );
   const playlist = React.useMemo(() => {
     const res = playlists.find(p => p.id === route.params.id);
     if (!res) {
@@ -29,6 +35,19 @@ const PlaylistView: React.FC<
     }
     return res;
   }, [route, playlists]);
+
+  React.useEffect(() => {
+    const readFiles = async () => {
+      const stats = await Promise.all(
+        playlist.songs.map(({uri}) => FileSystem.stat(uri)),
+      );
+      setSongData(
+        stats.map(({filename}, i) => ({filename, ...playlist.songs[i]})),
+      );
+    };
+    readFiles();
+  }, [playlist]);
+
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <View
@@ -41,10 +60,12 @@ const PlaylistView: React.FC<
       </View>
       <ScrollView>
         <View style={{flex: 1}}>
-          {playlist.songs.map(song => (
-            <Text>
-              {song.url}: {song.weight}
-            </Text>
+          {songData.map(song => (
+            <PlaylistSongDetails
+              key={song.uri}
+              song={song}
+              playlistId={playlist.id}
+            />
           ))}
         </View>
       </ScrollView>

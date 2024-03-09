@@ -2,21 +2,30 @@ import React from 'react';
 import {useTheme} from '@react-navigation/native';
 import {useState} from 'react';
 import {Button, Text, TextInput, View} from 'react-native';
+import {usePlaylists} from '../context/playlistsContext';
 
 type Props = {
   close: () => void;
+  uris: string[];
 };
 
-export default function CreateModal({close}: Props) {
+export default function CreatePlaylist({close, uris}: Props) {
   const {colors} = useTheme();
   const [name, setName] = useState('');
+  const {createPlaylist} = usePlaylists();
+
+  const onButtonPress = () => {
+    createPlaylist({name, songs: uris.map(uri => ({uri, weight: 1}))});
+    close();
+  };
 
   return (
     <View
       style={{
         backgroundColor: colors.card,
         padding: 16,
-        gap: 16,
+        gap: 8,
+        borderRadius: 5,
         width: '75%',
       }}>
       <Text style={{fontWeight: 'bold'}}>Create new playlist</Text>
@@ -31,7 +40,11 @@ export default function CreateModal({close}: Props) {
         onChangeText={setName}
         value={name}
       />
-      <Button title="Create" />
+      <Button
+        onPress={onButtonPress}
+        title="Create"
+        style={{borderRadius: 5}}
+      />
     </View>
   );
 }

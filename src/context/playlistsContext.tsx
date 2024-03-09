@@ -12,7 +12,7 @@ import {MMKV} from 'react-native-mmkv';
 const storage = new MMKV();
 
 export type PlaylistSong = {
-  url: string;
+  uri: string;
   weight: number;
 };
 
@@ -95,11 +95,11 @@ export const PlaylistsContextProvider: React.FC<PropsWithChildren> = ({
   );
 
   const addToPlaylist: PlaylistsData['addToPlaylist'] = useCallback(
-    (id, url) => {
+    (id, uri) => {
       setPlaylists(
         updatedPlaylists(playlists, id, p => ({
           ...p,
-          songs: [...p.songs, {url, weight: 1}],
+          songs: [...p.songs, {uri, weight: 1}],
         })),
       );
     },
@@ -107,23 +107,23 @@ export const PlaylistsContextProvider: React.FC<PropsWithChildren> = ({
   );
 
   const removeFromPlaylist: PlaylistsData['removeFromPlaylist'] = useCallback(
-    (id, url) => {
+    (id, uri) => {
       setPlaylists(
         updatedPlaylists(playlists, id, p => ({
           ...p,
-          songs: p.songs.filter(s => s.url !== url),
+          songs: p.songs.filter(s => s.uri !== uri),
         })),
       );
     },
     [playlists],
   );
   const editWeight: PlaylistsData['editWeight'] = useCallback(
-    (id, url, weight) => {
+    (id, uri, weight) => {
       setPlaylists(
         updatedPlaylists(playlists, id, p => ({
           ...p,
           songs: p.songs.map(s => {
-            if (s.url === url) {
+            if (s.uri === uri) {
               return {...s, weight};
             }
             return s;

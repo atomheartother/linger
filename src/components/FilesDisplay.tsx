@@ -98,7 +98,13 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         style={{flex: 1}}
       />
       <Dialog visible={openModal} onRequestClose={() => setOpenModal(false)}>
-        <CreatePlaylist close={() => setOpenModal(false)} />
+        <CreatePlaylist
+          close={() => {
+            setOpenModal(false);
+            setSelectedSongs(new Set());
+          }}
+          uris={[...selectedSongs]}
+        />
       </Dialog>
     </View>
   );
