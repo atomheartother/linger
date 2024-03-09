@@ -4,22 +4,41 @@ import {useTheme} from '@react-navigation/native';
 import FileDetails from './FileDetails';
 import {MusicInfo} from '../context/songsContext';
 import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Dialog from './Dialog';
 
 type Props = {
   songs: MusicInfo[];
 };
 
 const FilesDisplay: React.FC<Props> = ({songs}) => {
+  const [openModal, setOpenModal] = useState(false);
   const {colors} = useTheme();
   // When selectedSongs is empty, select mode is inactive
-  const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
-  const setSelected = useCallback((uri: string, selected: boolean) => {
-    if (!selected) {
-      setSelectedSongs(old => old && old.filter(s => s !== uri));
-    } else {
-      setSelectedSongs(old => old && [...old, uri]);
-    }
-  }, []);
+  const [selectedSongs, setSelectedSongs] = useState<Set<string>>(new Set());
+  const setSelected = useCallback(
+    (uri: string, selected: boolean) => {
+      const newSet = new Set(selectedSongs);
+      if (!selected) {
+        newSet.delete(uri);
+      } else {
+        newSet.add(uri);
+      }
+      setSelectedSongs(newSet);
+    },
+    [selectedSongs],
+  );
+
+  const selectAll = () => {
+    setSelectedSongs(new Set(songs.map(({uri}) => uri)));
+  };
+
+  const invertSelection = () => {
+    setSelectedSongs(
+      new Set(
+        songs.filter(({uri}) => !selectedSongs.has(uri)).map(({uri}) => uri),
+      ),
+    );
+  };
 
   return (
     <View
@@ -29,7 +48,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         flexDirection: 'column',
         backgroundColor: colors.background,
       }}>
-      {selectedSongs.length > 0 && (
+      {selectedSongs.size > 0 && (
         <View
           style={{
             backgroundColor: colors.card,
@@ -40,7 +59,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
           }}>
           <View style={{flex: 1}}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>
-              {selectedSongs.length} selected
+              {selectedSongs.size} selected
             </Text>
           </View>
           <View
@@ -49,11 +68,19 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignContent: 'center'
+              alignContent: 'center',
             }}>
-            <MUIIcon name="select-all" size={24} />
-            <MUIIcon name="select-inverse" size={24} />
-            <MUIIcon name="playlist-plus" size={24} />
+            <MUIIcon onPress={selectAll} name="select-all" size={24} />
+            <MUIIcon
+              onPress={invertSelection}
+              name="select-inverse"
+              size={24}
+            />
+            <MUIIcon
+              onPress={() => setOpenModal(true)}
+              name="playlist-plus"
+              size={24}
+            />
           </View>
         </View>
       )}
@@ -69,6 +96,11 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         )}
         style={{flex: 1}}
       />
+      <Dialog visible={openModal} onRequestClose={() => setOpenModal(false)}>
+        <View style={{backgroundColor: colors.card}}>
+          <Text>Papa poo pi</Text>
+        </View>
+      </Dialog>
     </View>
   );
 };

@@ -7,7 +7,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 type Props = {
   song: MusicInfo;
-  selectedSongs: string[];
+  selectedSongs: Set<string>;
   setSelected: (uri: string, selected: boolean) => void;
 };
 
@@ -15,12 +15,12 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
   const {playSong} = useTrackPlayer();
   const {colors} = useTheme();
   const isSelected = useMemo(() => {
-    return selectedSongs.includes(song.uri);
+    return selectedSongs.has(song.uri);
   }, [song, selectedSongs]);
   return (
     <TouchableNativeFeedback
       onPress={() => {
-        if (selectedSongs.length === 0) {
+        if (selectedSongs.size === 0) {
           playSong(song);
         } else {
           setSelected(song.uri, !isSelected);
@@ -36,7 +36,7 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
           flexDirection: 'row',
           padding: 5,
           justifyContent:
-            selectedSongs.length > 0 ? 'space-between' : 'flex-start',
+            selectedSongs.size > 0 ? 'space-between' : 'flex-start',
           alignContent: 'center',
           borderBottomColor: colors.border,
           borderBottomWidth: 1,
@@ -51,7 +51,7 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
           }}>
           <Text>{song.filename}</Text>
         </View>
-        {selectedSongs.length > 0 && (
+        {selectedSongs.size > 0 && (
           <CheckBox
             value={isSelected}
             onChange={() => setSelected(song.uri, !isSelected)}
