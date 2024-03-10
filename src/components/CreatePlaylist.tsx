@@ -1,7 +1,6 @@
 import React from 'react';
-import {useTheme} from '@react-navigation/native';
 import {useState} from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
+import {Text} from 'react-native';
 import {usePlaylists} from '../context/playlistsContext';
 import {LingerButton, LingerInput, ModalContainer} from '../containers';
 
@@ -11,7 +10,6 @@ type Props = {
 };
 
 export default function CreatePlaylist({close, uris}: Props) {
-  const {colors} = useTheme();
   const [name, setName] = useState('');
   const {createPlaylist} = usePlaylists();
 
@@ -24,7 +22,11 @@ export default function CreatePlaylist({close, uris}: Props) {
     <ModalContainer>
       <Text style={{fontWeight: 'bold'}}>Create new playlist</Text>
       <LingerInput onChangeText={setName} value={name} />
-      <LingerButton onPress={onButtonPress} title="Create" />
+      <LingerButton
+        disabled={name.length < 1}
+        onPress={onButtonPress}
+        title="Create"
+      />
     </ModalContainer>
   );
 }

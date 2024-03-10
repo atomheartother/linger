@@ -10,9 +10,10 @@ import SongDisplay from '../SongDisplay';
 type Props = {
   playlistId: number;
   song: PlaylistSong & MusicInfo;
+  play: () => void;
 };
 
-export default function PlaylistSongDetails({playlistId, song}: Props) {
+export default function PlaylistSongDetails({playlistId, song, play}: Props) {
   const {colors} = useTheme();
   const {editWeight} = usePlaylists();
   const [modalOpen, setModalOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function PlaylistSongDetails({playlistId, song}: Props) {
   }, [song]);
 
   return (
-    <SongDisplay song={song}>
+    <SongDisplay song={song} onPress={play}>
       <TouchableNativeFeedback onPress={() => setModalOpen(true)}>
         <View
           style={{
@@ -44,6 +45,7 @@ export default function PlaylistSongDetails({playlistId, song}: Props) {
           />
           <LingerButton
             title="ok"
+            disabled={Number(editedWeight) < 1}
             onPress={() => {
               editWeight(playlistId, song.uri, Number(editedWeight));
               setModalOpen(false);

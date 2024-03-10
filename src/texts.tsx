@@ -6,7 +6,7 @@ import {StyleSheet, Text, TextProps} from 'react-native';
 const makeStyles = (_colors: Theme['colors']) =>
   StyleSheet.create({
     listItemMainContent: {
-      paddingVertical: 10,
+      paddingVertical: 2,
       fontWeight: '500',
     },
   });

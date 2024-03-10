@@ -51,7 +51,15 @@ const PlaylistView: React.FC<
       ],
       [],
     );
+    TrackPlayer.reset();
     await addSongs(queue.sort(() => Math.random() - 0.5));
+    TrackPlayer.play();
+  };
+
+  const playFromIndex = async (idx: number) => {
+    TrackPlayer.reset();
+    await addSongs(songData);
+    TrackPlayer.skip(idx);
     TrackPlayer.play();
   };
 
@@ -87,11 +95,12 @@ const PlaylistView: React.FC<
       </ScreenHeader>
       <ScrollView>
         <View style={{flex: 1}}>
-          {songData.map(song => (
+          {songData.map((song, idx) => (
             <PlaylistSongDetails
               key={song.uri}
               song={song}
               playlistId={playlist.id}
+              play={() => playFromIndex(idx)}
             />
           ))}
         </View>

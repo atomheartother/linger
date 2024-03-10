@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {FlatList, Text, View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import FileDetails from './FileDetails';
-import {MusicInfo} from '../context/songsContext';
+import {MusicInfo, useSongs} from '../context/songsContext';
 import Dialog from './Dialog';
 import CreatePlaylist from './CreatePlaylist';
 import {ScreenHeader} from '../containers';
@@ -15,6 +15,7 @@ type Props = {
 const FilesDisplay: React.FC<Props> = ({songs}) => {
   const [openModal, setOpenModal] = useState(false);
   const {colors} = useTheme();
+  const {refresh, refreshing} = useSongs();
   // When selectedSongs is empty, select mode is inactive
   const [selectedSongs, setSelectedSongs] = useState<Set<string>>(new Set());
   const setSelected = useCallback(
@@ -84,6 +85,8 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
       </ScreenHeader>
       <FlatList<MusicInfo>
         data={songs}
+        refreshing={refreshing}
+        onRefresh={refresh}
         renderItem={({item: song}) => (
           <FileDetails
             key={song.uri}

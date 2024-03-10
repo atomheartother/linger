@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useMemo} from 'react';
+import React, {PropsWithChildren, useEffect, useMemo} from 'react';
 import {useTrackPlayer} from '../context/playerContext';
 import {Text, View} from 'react-native';
 import TrackPlayer, {
@@ -11,6 +11,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {useTheme} from '@react-navigation/native';
 import IconButton from './IconButton';
+import {useStats} from '../context/stats';
 
 const repeatModeIcon: {
   [key in RepeatMode]: string;

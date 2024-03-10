@@ -28,9 +28,11 @@ const makeStyles = (colors: Theme['colors']) =>
     },
     listItem: {
       padding: 5,
+      gap: 5,
+      display: 'flex',
+      flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      flexDirection: 'row',
       borderBottomColor: colors.border,
       borderBottomWidth: 1,
     },

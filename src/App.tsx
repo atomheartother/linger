@@ -10,6 +10,7 @@ import Playlists from './routes/Playlists';
 import {PlaylistsContextProvider} from './context/playlistsContext';
 import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {LingerButton, ScreenHeader} from './containers';
+import {StatsContextProvider} from './context/stats';
 
 function SettingsScreen() {
   const {promptForDir} = useSettings();
@@ -37,55 +38,57 @@ function App() {
   return (
     <SettingsContextProvider>
       <SongsContextProvider>
-        <TrackPlayerContextProvider>
-          <PlaylistsContextProvider>
-            <NavigationContainer theme={MyTheme}>
-              <Tab.Navigator
-                initialRouteName="Home"
-                screenOptions={{
-                  headerShown: false,
-                  tabBarStyle: {paddingBottom: 2},
-                }}>
-                <Tab.Screen
-                  name="Home"
-                  component={Home}
-                  options={{
-                    tabBarLabel: 'Songs',
-                    tabBarIcon: ({color, size}) => (
-                      <MUIIcon
-                        name="music-box-outline"
-                        size={size}
-                        color={color}
-                      />
-                    ),
-                  }}
-                />
-                <Tab.Screen
-                  name="Playlists"
-                  component={Playlists}
-                  options={{
-                    tabBarIcon: ({color, size}) => (
-                      <MUIIcon
-                        name="playlist-music"
-                        size={size}
-                        color={color}
-                      />
-                    ),
-                  }}
-                />
-                <Tab.Screen
-                  name="Settings"
-                  component={SettingsScreen}
-                  options={{
-                    tabBarIcon: ({color, size}) => (
-                      <MUIIcon name="cog" size={size} color={color} />
-                    ),
-                  }}
-                />
-              </Tab.Navigator>
-            </NavigationContainer>
-          </PlaylistsContextProvider>
-        </TrackPlayerContextProvider>
+        <StatsContextProvider>
+          <TrackPlayerContextProvider>
+            <PlaylistsContextProvider>
+              <NavigationContainer theme={MyTheme}>
+                <Tab.Navigator
+                  initialRouteName="Home"
+                  screenOptions={{
+                    headerShown: false,
+                    tabBarStyle: {paddingBottom: 2},
+                  }}>
+                  <Tab.Screen
+                    name="Home"
+                    component={Home}
+                    options={{
+                      tabBarLabel: 'Songs',
+                      tabBarIcon: ({color, size}) => (
+                        <MUIIcon
+                          name="music-box-outline"
+                          size={size}
+                          color={color}
+                        />
+                      ),
+                    }}
+                  />
+                  <Tab.Screen
+                    name="Playlists"
+                    component={Playlists}
+                    options={{
+                      tabBarIcon: ({color, size}) => (
+                        <MUIIcon
+                          name="playlist-music"
+                          size={size}
+                          color={color}
+                        />
+                      ),
+                    }}
+                  />
+                  <Tab.Screen
+                    name="Settings"
+                    component={SettingsScreen}
+                    options={{
+                      tabBarIcon: ({color, size}) => (
+                        <MUIIcon name="cog" size={size} color={color} />
+                      ),
+                    }}
+                  />
+                </Tab.Navigator>
+              </NavigationContainer>
+            </PlaylistsContextProvider>
+          </TrackPlayerContextProvider>
+        </StatsContextProvider>
       </SongsContextProvider>
     </SettingsContextProvider>
   );

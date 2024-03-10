@@ -12,8 +12,11 @@ import TrackPlayer, {
   Capability,
   RepeatMode,
   Event,
+  useTrackPlayerEvents,
+  State,
 } from 'react-native-track-player';
 import {MusicInfo} from './songsContext';
+import {useStats} from './stats';
 
 export type TrackPlayerData = {
   playSong: (song: MusicInfo) => void;
@@ -21,6 +24,8 @@ export type TrackPlayerData = {
   repeatMode: RepeatMode;
   changeRepeatMode: (rm: RepeatMode) => void;
 };
+
+const events = [Event.PlaybackState, Event.PlaybackProgressUpdated];
 
 export const TrackPlayerContext = createContext<TrackPlayerData | undefined>(
   undefined,
@@ -31,6 +36,9 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
 }) => {
   const [ready, setReady] = useState(false);
   const [repeatMode, setRepeatMode] = useState(RepeatMode.Queue);
+  const {registerSongPlay} = useStats();
+  // For stats purposes
+  const [newSongLoaded, setNewSongLoaded] = useState(false);
 
   const changeRepeatMode = useCallback((rm: RepeatMode) => {
     setRepeatMode(rm);
@@ -64,12 +72,33 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
           Capability.SkipToNext,
           Capability.SkipToPrevious,
         ],
-        progressUpdateEventInterval: 2,
+        progressUpdateEventInterval: 1,
       });
       setReady(true);
     };
     setup();
   }, []);
+
+  useTrackPlayerEvents(events, e => {
+    switch (e.type) {
+      case Event.PlaybackState: {
+        if (e.state === State.Loading) {
+          // prepare the player to received a new track info
+          setNewSongLoaded(true);
+        }
+        break;
+      }
+      case Event.PlaybackProgressUpdated: {
+        if (newSongLoaded) {
+          // Process track info and stop processing further tracks
+          setNewSongLoaded(false);
+          TrackPlayer.getQueue().then(queue => {
+            registerSongPlay(queue[e.track].url);
+          });
+        }
+      }
+    }
+  });
 
   const addSongs = useCallback(
     async (songs: MusicInfo[]) => {
