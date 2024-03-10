@@ -4,6 +4,7 @@ import {useSettings} from '../context/settingsContext';
 import {View, Text, Button} from 'react-native';
 import FilesDisplay from '../components/FilesDisplay';
 import {useSongs} from '../context/songsContext';
+import { LingerButton } from '../containers';
 
 const Home: React.FC = () => {
   const {colors} = useTheme();
@@ -24,7 +25,7 @@ const Home: React.FC = () => {
           It looks like you haven't set a directory yet and I can't see any
           music :(
         </Text>
-        <Button onPress={promptForDir} title="Select music directory" />
+        <LingerButton onPress={promptForDir} title="Select music directory" />
       </View>
     );
   }

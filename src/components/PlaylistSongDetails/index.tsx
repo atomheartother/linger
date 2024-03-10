@@ -1,15 +1,11 @@
 import {useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  Text,
-  TextInput,
-  TouchableNativeFeedback,
-  View,
-} from 'react-native';
+import {Text, TextInput, TouchableNativeFeedback, View} from 'react-native';
 import {PlaylistSong, usePlaylists} from '../../context/playlistsContext';
 import {MusicInfo} from '../../context/songsContext';
 import Dialog from '../Dialog';
+import {LingerButton, ListItem, ModalContainer} from '../../containers';
+import {ListItemMainContent} from '../../texts';
 
 type Props = {
   playlistId: number;
@@ -26,17 +22,8 @@ export default function PlaylistSongDetails({playlistId, song}: Props) {
   }, [song]);
 
   return (
-    <View
-      key={song.uri}
-      style={{
-        padding: 5,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        borderBottomColor: colors.border,
-        borderBottomWidth: 1,
-      }}>
-      <Text style={{padding: 10}}>{song.filename}</Text>
+    <ListItem key={song.uri}>
+      <ListItemMainContent>{song.filename}</ListItemMainContent>
       <View>
         <TouchableNativeFeedback onPress={() => setModalOpen(true)}>
           <View
@@ -51,25 +38,22 @@ export default function PlaylistSongDetails({playlistId, song}: Props) {
         </TouchableNativeFeedback>
       </View>
       <Dialog visible={modalOpen} onRequestClose={() => setModalOpen(false)}>
-        <View style={{backgroundColor: colors.card, padding: 16, gap: 8}}>
+        <ModalContainer>
           <Text>{song.filename} weight:</Text>
           <TextInput
             value={editedWeight}
             onChangeText={setEditedWeight}
             inputMode="numeric"
           />
-          <Button
+          <LingerButton
             title="ok"
-            style={{
-              borderRadius: 5,
-            }}
             onPress={() => {
               editWeight(playlistId, song.uri, Number(editedWeight));
               setModalOpen(false);
             }}
           />
-        </View>
+        </ModalContainer>
       </Dialog>
-    </View>
+    </ListItem>
   );
 }

@@ -12,6 +12,7 @@ import {FileSystem} from 'react-native-file-access';
 import {MusicInfo} from '../context/songsContext';
 import PlaylistSongDetails from '../components/PlaylistSongDetails';
 import {useTrackPlayer} from '../context/playerContext';
+import {ScreenHeader} from '../containers';
 
 type PlaylistRouteParams = {
   AllPlaylists: undefined;
@@ -65,19 +66,12 @@ const PlaylistView: React.FC<
 
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
-      <View
-        style={{
-          padding: 16,
-          borderBottomWidth: 1,
-          borderBottomColor: colors.border,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
+      <ScreenHeader>
         <Text style={{fontWeight: 'bold'}}>{playlist.name}</Text>
         <View style={{flexDirection: 'row', gap: 2}}>
           <MUIIcon name="shuffle-variant" size={16} onPress={playRandomQueue} />
         </View>
-      </View>
+      </ScreenHeader>
       <ScrollView>
         <View style={{flex: 1}}>
           {songData.map(song => (
@@ -105,23 +99,32 @@ const AllPlaylists: React.FC<
     [navigation],
   );
   return (
-    <ScrollView>
-      <View style={{flex: 1, backgroundColor: colors.background}}>
-        {playlists.map(playlist => (
-          <PlaylistDetails
-            key={playlist.id}
-            playlist={playlist}
-            navigate={navigate}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <View>
+      <ScreenHeader>
+        <Text style={{fontWeight: 'bold'}}>{playlists.length} playlists</Text>
+      </ScreenHeader>
+      <ScrollView>
+        <View style={{flex: 1, backgroundColor: colors.background}}>
+          {playlists.map(playlist => (
+            <PlaylistDetails
+              key={playlist.id}
+              playlist={playlist}
+              navigate={navigate}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
 const Playlists: React.FC = () => {
   return (
-    <Stack.Navigator initialRouteName="AllPlaylists">
+    <Stack.Navigator
+      initialRouteName="AllPlaylists"
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Stack.Screen name="AllPlaylists" component={AllPlaylists} />
       <Stack.Screen name="PlaylistView" component={PlaylistView} />
     </Stack.Navigator>

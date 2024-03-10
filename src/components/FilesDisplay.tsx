@@ -6,6 +6,7 @@ import {MusicInfo} from '../context/songsContext';
 import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Dialog from './Dialog';
 import CreatePlaylist from './CreatePlaylist';
+import {ScreenHeader} from '../containers';
 
 type Props = {
   songs: MusicInfo[];
@@ -49,20 +50,15 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         flexDirection: 'column',
         backgroundColor: colors.background,
       }}>
-      {selectedSongs.size > 0 && (
-        <View
-          style={{
-            backgroundColor: colors.card,
-            padding: 10,
-            display: 'flex',
-            flexDirection: 'row',
-            alignContent: 'center',
-          }}>
-          <View style={{flex: 1}}>
-            <Text style={{fontSize: 18, fontWeight: '600'}}>
-              {selectedSongs.size} selected
-            </Text>
-          </View>
+      <ScreenHeader>
+        <View style={{flex: 1}}>
+          <Text style={{fontSize: 18, fontWeight: '600'}}>
+            {selectedSongs.size > 0
+              ? `${selectedSongs.size} selected`
+              : `${songs.length} files`}
+          </Text>
+        </View>
+        {selectedSongs.size > 0 && (
           <View
             style={{
               flex: 1,
@@ -83,8 +79,8 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               size={24}
             />
           </View>
-        </View>
-      )}
+        )}
+      </ScreenHeader>
       <FlatList<MusicInfo>
         data={songs}
         renderItem={({item: song}) => (

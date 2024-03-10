@@ -1,9 +1,10 @@
 import React, {useMemo} from 'react';
 import {Text, TouchableNativeFeedback, View} from 'react-native';
 import {useTrackPlayer} from '../context/playerContext';
-import {useTheme} from '@react-navigation/native';
 import {MusicInfo} from '../context/songsContext';
 import CheckBox from '@react-native-community/checkbox';
+import {ListItem} from '../containers';
+import {ListItemMainContent} from '../texts';
 
 type Props = {
   song: MusicInfo;
@@ -13,7 +14,6 @@ type Props = {
 
 const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
   const {playSong} = useTrackPlayer();
-  const {colors} = useTheme();
   const isSelected = useMemo(() => {
     return selectedSongs.has(song.uri);
   }, [song, selectedSongs]);
@@ -29,35 +29,17 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
       onLongPress={() => {
         setSelected(song.uri, true);
       }}>
-      <View
-        style={{
-          display: 'flex',
-          flex: 1,
-          flexDirection: 'row',
-          padding: 5,
-          justifyContent:
-            selectedSongs.size > 0 ? 'space-between' : 'flex-start',
-          alignContent: 'center',
-          borderBottomColor: colors.border,
-          borderBottomWidth: 1,
-        }}>
-        <View
-          style={{
-            flex: 1,
-            padding: 10,
-            display: 'flex',
-            flexDirection: 'row',
-            alignContent: 'center',
-          }}>
+      <ListItem>
+        <ListItemMainContent>
           <Text>{song.filename}</Text>
-        </View>
+        </ListItemMainContent>
         {selectedSongs.size > 0 && (
           <CheckBox
             value={isSelected}
             onChange={() => setSelected(song.uri, !isSelected)}
           />
         )}
-      </View>
+      </ListItem>
     </TouchableNativeFeedback>
   );
 };

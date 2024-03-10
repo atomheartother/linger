@@ -3,6 +3,7 @@ import {useTheme} from '@react-navigation/native';
 import {useState} from 'react';
 import {Button, Text, TextInput, View} from 'react-native';
 import {usePlaylists} from '../context/playlistsContext';
+import {LingerButton, ModalContainer} from '../containers';
 
 type Props = {
   close: () => void;
@@ -20,14 +21,7 @@ export default function CreatePlaylist({close, uris}: Props) {
   };
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.card,
-        padding: 16,
-        gap: 8,
-        borderRadius: 5,
-        width: '75%',
-      }}>
+    <ModalContainer>
       <Text style={{fontWeight: 'bold'}}>Create new playlist</Text>
       <TextInput
         style={{
@@ -40,11 +34,7 @@ export default function CreatePlaylist({close, uris}: Props) {
         onChangeText={setName}
         value={name}
       />
-      <Button
-        onPress={onButtonPress}
-        title="Create"
-        style={{borderRadius: 5}}
-      />
-    </View>
+      <LingerButton onPress={onButtonPress} title="Create" />
+    </ModalContainer>
   );
 }
