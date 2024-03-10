@@ -15,8 +15,9 @@ import TrackPlayer, {
 import {MusicInfo} from './songsContext';
 
 type TrackPlayerData = {
+  play: () => void;
   playSong: (song: MusicInfo) => void;
-  addSong: (song: MusicInfo) => void;
+  addSongs: (song: MusicInfo[]) => Promise<void>;
 };
 
 export const TrackPlayerContext = createContext<TrackPlayerData | undefined>(
@@ -46,38 +47,45 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
     setup();
   }, []);
 
-  const addSong = useCallback(
-    async (song: MusicInfo) => {
-      if (!ready) {
-        return;
-      }
-      await TrackPlayer.add({
-        title: song.filename,
-        url: song.uri,
-        artist: 'unknown',
-      });
-    },
-    [ready],
-  );
-
-  const playSong = useCallback(
-    async (song: MusicInfo) => {
+  const addSongs = useCallback(
+    async (songs: MusicInfo[]) => {
       if (!ready) {
         return;
       }
       await TrackPlayer.reset();
-      await addSong(song);
-      TrackPlayer.play();
+      await TrackPlayer.add(
+        songs.map(song => ({
+          title: song.filename,
+          url: song.uri,
+          artist: 'unknown',
+        })),
+      );
     },
-    [ready, addSong],
+    [ready],
+  );
+
+  const play = useCallback(() => {
+    if (!ready) {
+      return;
+    }
+    TrackPlayer.play();
+  }, [ready]);
+
+  const playSong = useCallback(
+    async (song: MusicInfo) => {
+      await addSongs([song]);
+      play();
+    },
+    [play, addSongs],
   );
 
   const data = useMemo(
     () => ({
-      addSong,
+      play,
+      addSongs,
       playSong,
     }),
-    [addSong, playSong],
+    [addSongs, playSong, play],
   );
 
   return (
