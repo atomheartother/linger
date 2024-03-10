@@ -1,6 +1,14 @@
 import {Theme, useTheme} from '@react-navigation/native';
 import React, {useMemo} from 'react';
-import {View, StyleSheet, ViewProps, ButtonProps, Button} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ViewProps,
+  ButtonProps,
+  Button,
+  TextInputProps,
+  TextInput,
+} from 'react-native';
 
 const makeStyles = (colors: Theme['colors']) =>
   StyleSheet.create({
@@ -27,6 +35,13 @@ const makeStyles = (colors: Theme['colors']) =>
       flexDirection: 'row',
       borderBottomColor: colors.border,
       borderBottomWidth: 1,
+    },
+    textInput: {
+      borderWidth: 1,
+      borderColor: colors.text,
+      borderRadius: 5,
+      padding: 2,
+      paddingLeft: 8,
     },
   });
 
@@ -56,4 +71,11 @@ export function ListItem({style, ...itemProps}: ViewProps) {
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
   return <View style={[styles.listItem, style]} {...itemProps} />;
+}
+
+export function LingerInput({style, ...inputProps}: TextInputProps) {
+  const {colors} = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
+
+  return <TextInput style={[styles.textInput, style]} {...inputProps} />;
 }

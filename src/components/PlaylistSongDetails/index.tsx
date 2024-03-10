@@ -4,7 +4,7 @@ import {Text, TextInput, TouchableNativeFeedback, View} from 'react-native';
 import {PlaylistSong, usePlaylists} from '../../context/playlistsContext';
 import {MusicInfo} from '../../context/songsContext';
 import Dialog from '../Dialog';
-import {LingerButton, ListItem, ModalContainer} from '../../containers';
+import {LingerButton, LingerInput, ListItem, ModalContainer} from '../../containers';
 import {ListItemMainContent} from '../../texts';
 
 type Props = {
@@ -40,7 +40,7 @@ export default function PlaylistSongDetails({playlistId, song}: Props) {
       <Dialog visible={modalOpen} onRequestClose={() => setModalOpen(false)}>
         <ModalContainer>
           <Text>{song.filename} weight:</Text>
-          <TextInput
+          <LingerInput
             value={editedWeight}
             onChangeText={setEditedWeight}
             inputMode="numeric"
