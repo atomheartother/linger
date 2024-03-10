@@ -68,16 +68,16 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               alignContent: 'center',
               gap: 16,
             }}>
-            <IconButton onPress={selectAll} icon="select-all" size={22} />
+            <IconButton onPress={selectAll} icon="select-all" size={20} />
             <IconButton
               onPress={invertSelection}
               icon="select-inverse"
-              size={22}
+              size={20}
             />
             <IconButton
               onPress={() => setOpenModal(true)}
               icon="playlist-plus"
-              size={22}
+              size={20}
             />
           </View>
         )}
