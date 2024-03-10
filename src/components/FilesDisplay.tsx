@@ -66,7 +66,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               flexDirection: 'row',
               justifyContent: 'flex-end',
               alignContent: 'center',
-              gap: 16
+              gap: 16,
             }}>
             <IconButton onPress={selectAll} icon="select-all" size={22} />
             <IconButton

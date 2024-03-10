@@ -1,26 +1,28 @@
 import React, {PropsWithChildren, useMemo} from 'react';
-import {TrackPlayerData, useTrackPlayer} from '../context/playerContext';
+import {useTrackPlayer} from '../context/playerContext';
 import {Text, View} from 'react-native';
 import TrackPlayer, {
   RepeatMode,
   State,
+  Track,
+  useActiveTrack,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
 import {useTheme} from '@react-navigation/native';
 import IconButton from './IconButton';
 
-type PlayingProps = {
-  playing: Exclude<TrackPlayerData['playing'], null>;
-};
-
-const repeatModeIcon : {
-  [key in RepeatMode]: string
+const repeatModeIcon: {
+  [key in RepeatMode]: string;
 } = {
   [RepeatMode.Off]: 'repeat-off',
   [RepeatMode.Queue]: 'repeat',
   [RepeatMode.Track]: 'repeat-once',
-}
+};
+
+type PlayingProps = {
+  playing: Track;
+};
 
 function Playing({playing}: PlayingProps) {
   const {colors} = useTheme();
@@ -38,7 +40,7 @@ function Playing({playing}: PlayingProps) {
     } else {
       changeRepeatMode(RepeatMode.Off);
     }
-  }
+  };
   return (
     <View>
       <View
@@ -64,7 +66,7 @@ function Playing({playing}: PlayingProps) {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <Text>{playing.song.filename}</Text>
+        <Text>{playing.title}</Text>
         <View style={{flexDirection: 'row', gap: 8}}>
           <IconButton
             icon={playbackState === State.Playing ? 'pause' : 'play'}
@@ -87,11 +89,11 @@ function Playing({playing}: PlayingProps) {
 }
 
 export default function PlayingWrapper({children}: PropsWithChildren) {
-  const {playing} = useTrackPlayer();
+  const track = useActiveTrack();
   return (
     <View style={{flex: 1, display: 'flex'}}>
       {children}
-      {playing && <Playing playing={playing} />}
+      {track && <Playing playing={track} />}
     </View>
   );
 }

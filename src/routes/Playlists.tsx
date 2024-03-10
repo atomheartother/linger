@@ -15,6 +15,7 @@ import {ScreenHeader} from '../containers';
 import PlayingWrapper from '../components/PlayingWrapper';
 import IconButton from '../components/IconButton';
 import TrackPlayer from 'react-native-track-player';
+import {truncateFileName} from '../utils';
 
 type PlaylistRouteParams = {
   AllPlaylists: undefined;
@@ -60,7 +61,10 @@ const PlaylistView: React.FC<
         playlist.songs.map(({uri}) => FileSystem.stat(uri)),
       );
       setSongData(
-        stats.map(({filename}, i) => ({filename, ...playlist.songs[i]})),
+        stats.map(({filename}, i) => ({
+          filename: truncateFileName(filename),
+          ...playlist.songs[i],
+        })),
       );
     };
     readFiles();
@@ -71,7 +75,7 @@ const PlaylistView: React.FC<
       <ScreenHeader>
         <View>
           <Text style={{fontWeight: 'bold'}}>{playlist.name}</Text>
-          <Text style={{ opacity: 0.6 }}>{playlist.songs.length} songs</Text>
+          <Text style={{opacity: 0.6}}>{playlist.songs.length} songs</Text>
         </View>
         <View style={{flexDirection: 'row', gap: 2}}>
           <IconButton

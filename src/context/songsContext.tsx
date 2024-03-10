@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import {useSettings} from './settingsContext';
 import {AndroidScoped, FileSystem} from 'react-native-file-access';
+import { truncateFileName } from '../utils';
 
 export type MusicInfo = {
   filename: string;
@@ -38,7 +39,7 @@ export const SongsContextProvider: React.FC<PropsWithChildren> = ({
 
       setAllSongs(
         files.map((f, i) => ({
-          filename: f,
+          filename: truncateFileName(f),
           uri: uris[i],
         })),
       );
