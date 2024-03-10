@@ -15,7 +15,7 @@ export type MusicInfo = {
 };
 
 type SongsData = {
-  allSongs: MusicInfo[];
+  allSongs: MusicInfo[] | null;
 };
 
 export const SongsContext = createContext<SongsData | undefined>(undefined);
@@ -24,7 +24,7 @@ export const SongsContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const {dirUri} = useSettings();
-  const [allSongs, setAllSongs] = useState<MusicInfo[]>([]);
+  const [allSongs, setAllSongs] = useState<MusicInfo[] | null>(null);
 
   useEffect(() => {
     const getAndParseFiles = async () => {
@@ -44,6 +44,7 @@ export const SongsContextProvider: React.FC<PropsWithChildren> = ({
       );
     };
 
+    setAllSongs(null);
     getAndParseFiles();
   }, [dirUri]);
 

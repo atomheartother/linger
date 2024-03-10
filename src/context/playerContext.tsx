@@ -11,23 +11,36 @@ import TrackPlayer, {
   AppKilledPlaybackBehavior,
   Capability,
   RepeatMode,
+  useTrackPlayerEvents,
+  Event,
 } from 'react-native-track-player';
 import {MusicInfo} from './songsContext';
 
-type TrackPlayerData = {
+type PlayingData = {
+  song: MusicInfo;
+  // If a playlist is currently playing, this is set to the id
+  // Otherwise it's set to -1
+  playlistId: number;
+};
+
+export type TrackPlayerData = {
   play: () => void;
   playSong: (song: MusicInfo) => void;
   addSongs: (song: MusicInfo[]) => Promise<void>;
+  playing: PlayingData | null;
 };
 
 export const TrackPlayerContext = createContext<TrackPlayerData | undefined>(
   undefined,
 );
 
+const events = [Event.PlaybackActiveTrackChanged];
+
 export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const [ready, setReady] = useState(false);
+  const [playing, setPlaying] = useState<TrackPlayerData['playing']>(null);
 
   useEffect(() => {
     const setup = async () => {
@@ -38,14 +51,46 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
           appKilledPlaybackBehavior:
             AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
         },
-        capabilities: [Capability.Play, Capability.Pause],
-        compactCapabilities: [Capability.Play, Capability.Pause],
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+          Capability.Stop,
+        ],
+        compactCapabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+        ],
         progressUpdateEventInterval: 2,
       });
       setReady(true);
     };
     setup();
   }, []);
+
+  useTrackPlayerEvents(events, event => {
+    switch (event.type) {
+      case Event.PlaybackActiveTrackChanged: {
+        const {lastTrack} = event;
+        if (!lastTrack) {
+          setPlaying(null);
+        } else if (!playing) {
+          setPlaying({
+            song: {uri: lastTrack.url, filename: lastTrack.title || 'unknown'},
+            playlistId: -1,
+          });
+        } else {
+          setPlaying({
+            ...playing,
+            song: {uri: lastTrack.url, filename: lastTrack.title || 'unknown'},
+          });
+        }
+      }
+    }
+  });
 
   const addSongs = useCallback(
     async (songs: MusicInfo[]) => {
@@ -84,8 +129,9 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
       play,
       addSongs,
       playSong,
+      playing,
     }),
-    [addSongs, playSong, play],
+    [addSongs, playSong, play, playing],
   );
 
   return (

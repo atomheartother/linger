@@ -17,9 +17,7 @@ const makeStyles = (colors: Theme['colors']) =>
       backgroundColor: colors.card,
       flexDirection: 'row',
       justifyContent: 'space-between',
-    },
-    button: {
-      borderRadius: 5,
+      alignItems: 'center',
     },
     modal: {
       backgroundColor: colors.card,
@@ -52,11 +50,11 @@ export function ScreenHeader({style, ...viewProps}: ViewProps) {
   return <View style={[styles.screenHeader, style]} {...viewProps} />;
 }
 
-export function LingerButton({style, ...buttonProps}: ButtonProps) {
+export function LingerButton({...buttonProps}: ButtonProps) {
   const {colors} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
-  return <Button style={[styles.button, style]} {...buttonProps} />;
+  return <Button color={colors.primary} {...buttonProps} />;
 }
 
 export function ModalContainer({style, ...modalProps}: ViewProps) {

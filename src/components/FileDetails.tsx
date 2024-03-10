@@ -5,6 +5,7 @@ import {MusicInfo} from '../context/songsContext';
 import CheckBox from '@react-native-community/checkbox';
 import {ListItem} from '../containers';
 import {ListItemMainContent} from '../texts';
+import { useTheme } from '@react-navigation/native';
 
 type Props = {
   song: MusicInfo;
@@ -14,6 +15,7 @@ type Props = {
 
 const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
   const {playSong} = useTrackPlayer();
+  const {colors} = useTheme();
   const isSelected = useMemo(() => {
     return selectedSongs.has(song.uri);
   }, [song, selectedSongs]);
@@ -37,6 +39,7 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
           <CheckBox
             value={isSelected}
             onChange={() => setSelected(song.uri, !isSelected)}
+            tintColors={{true: colors.primary, false: colors.border}}
           />
         )}
       </ListItem>

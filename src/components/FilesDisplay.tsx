@@ -3,10 +3,10 @@ import {FlatList, Text, View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import FileDetails from './FileDetails';
 import {MusicInfo} from '../context/songsContext';
-import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Dialog from './Dialog';
 import CreatePlaylist from './CreatePlaylist';
 import {ScreenHeader} from '../containers';
+import IconButton from './IconButton';
 
 type Props = {
   songs: MusicInfo[];
@@ -64,19 +64,20 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               flex: 1,
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-end',
               alignContent: 'center',
+              gap: 16
             }}>
-            <MUIIcon onPress={selectAll} name="select-all" size={24} />
-            <MUIIcon
+            <IconButton onPress={selectAll} icon="select-all" size={22} />
+            <IconButton
               onPress={invertSelection}
-              name="select-inverse"
-              size={24}
+              icon="select-inverse"
+              size={22}
             />
-            <MUIIcon
+            <IconButton
               onPress={() => setOpenModal(true)}
-              name="playlist-plus"
-              size={24}
+              icon="playlist-plus"
+              size={22}
             />
           </View>
         )}

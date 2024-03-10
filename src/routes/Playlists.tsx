@@ -6,13 +6,14 @@ import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlaylistDetails from '../components/PlaylistDetails';
 import {FileSystem} from 'react-native-file-access';
 import {MusicInfo} from '../context/songsContext';
 import PlaylistSongDetails from '../components/PlaylistSongDetails';
 import {useTrackPlayer} from '../context/playerContext';
 import {ScreenHeader} from '../containers';
+import PlayingWrapper from '../components/PlayingWrapper';
+import IconButton from '../components/IconButton';
 
 type PlaylistRouteParams = {
   AllPlaylists: undefined;
@@ -67,9 +68,16 @@ const PlaylistView: React.FC<
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <ScreenHeader>
-        <Text style={{fontWeight: 'bold'}}>{playlist.name}</Text>
+        <View>
+          <Text style={{fontWeight: 'bold'}}>{playlist.name}</Text>
+          <Text style={{ opacity: 0.6 }}>{playlist.songs.length} songs</Text>
+        </View>
         <View style={{flexDirection: 'row', gap: 2}}>
-          <MUIIcon name="shuffle-variant" size={16} onPress={playRandomQueue} />
+          <IconButton
+            icon="shuffle-variant"
+            size={20}
+            onPress={playRandomQueue}
+          />
         </View>
       </ScreenHeader>
       <ScrollView>
@@ -131,4 +139,12 @@ const Playlists: React.FC = () => {
   );
 };
 
-export default Playlists;
+function PlaylistsRoute() {
+  return (
+    <PlayingWrapper>
+      <Playlists />
+    </PlayingWrapper>
+  );
+}
+
+export default PlaylistsRoute;
