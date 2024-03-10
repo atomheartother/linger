@@ -24,10 +24,11 @@ type PlayingData = {
 };
 
 export type TrackPlayerData = {
-  play: () => void;
   playSong: (song: MusicInfo) => void;
   addSongs: (song: MusicInfo[]) => Promise<void>;
   playing: PlayingData | null;
+  repeatMode: RepeatMode;
+  changeRepeatMode: (rm: RepeatMode) => void;
 };
 
 export const TrackPlayerContext = createContext<TrackPlayerData | undefined>(
@@ -41,11 +42,22 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
 }) => {
   const [ready, setReady] = useState(false);
   const [playing, setPlaying] = useState<TrackPlayerData['playing']>(null);
+  const [repeatMode, setRepeatMode] = useState(RepeatMode.Queue);
+
+  const changeRepeatMode = useCallback((rm: RepeatMode) => {
+    setRepeatMode(rm);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) {
+      return;
+    }
+    TrackPlayer.setRepeatMode(repeatMode);
+  }, [repeatMode, ready]);
 
   useEffect(() => {
     const setup = async () => {
       await TrackPlayer.setupPlayer();
-      TrackPlayer.setRepeatMode(RepeatMode.Queue);
       await TrackPlayer.updateOptions({
         android: {
           appKilledPlaybackBehavior:
@@ -109,29 +121,23 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
     [ready],
   );
 
-  const play = useCallback(() => {
-    if (!ready) {
-      return;
-    }
-    TrackPlayer.play();
-  }, [ready]);
-
   const playSong = useCallback(
     async (song: MusicInfo) => {
       await addSongs([song]);
-      play();
+      TrackPlayer.play();
     },
-    [play, addSongs],
+    [addSongs],
   );
 
   const data = useMemo(
     () => ({
-      play,
       addSongs,
       playSong,
       playing,
+      repeatMode,
+      changeRepeatMode,
     }),
-    [addSongs, playSong, play, playing],
+    [addSongs, playSong, playing, repeatMode, changeRepeatMode],
   );
 
   return (

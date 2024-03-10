@@ -14,6 +14,7 @@ import {useTrackPlayer} from '../context/playerContext';
 import {ScreenHeader} from '../containers';
 import PlayingWrapper from '../components/PlayingWrapper';
 import IconButton from '../components/IconButton';
+import TrackPlayer from 'react-native-track-player';
 
 type PlaylistRouteParams = {
   AllPlaylists: undefined;
@@ -26,7 +27,7 @@ const PlaylistView: React.FC<
   NativeStackScreenProps<PlaylistRouteParams, 'PlaylistView'>
 > = ({route}) => {
   const {playlists} = usePlaylists();
-  const {addSongs, play} = useTrackPlayer();
+  const {addSongs} = useTrackPlayer();
   const {colors} = useTheme();
   const [songData, setSongData] = React.useState<(MusicInfo & PlaylistSong)[]>(
     [],
@@ -50,7 +51,7 @@ const PlaylistView: React.FC<
       [],
     );
     await addSongs(queue.sort(() => Math.random() - 0.5));
-    play();
+    TrackPlayer.play();
   };
 
   React.useEffect(() => {
