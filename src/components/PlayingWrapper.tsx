@@ -61,12 +61,13 @@ function Playing({playing}: PlayingProps) {
       <View
         style={{
           padding: 16,
-          backgroundColor: colors.card,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <Text>{playing.title}</Text>
+        <View>
+          <Text>{playing.title}</Text>
+        </View>
         <View style={{flexDirection: 'row', gap: 8}}>
           <IconButton
             icon={playbackState === State.Playing ? 'pause' : 'play'}
