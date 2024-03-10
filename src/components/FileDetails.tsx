@@ -7,21 +7,26 @@ import SongDisplay from './SongDisplay';
 
 type Props = {
   song: MusicInfo;
-  selectedSongs: Set<string>;
   setSelected: (uri: string, selected: boolean) => void;
+  // There is a selected song
+  hasSelected: boolean;
+  // We're selected
+  isSelected: boolean;
 };
 
-const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
+const FileDetails: React.FC<Props> = ({
+  song,
+  hasSelected,
+  isSelected,
+  setSelected,
+}) => {
   const {playSong} = useTrackPlayer();
   const {colors} = useTheme();
-  const isSelected = useMemo(() => {
-    return selectedSongs.has(song.uri);
-  }, [song, selectedSongs]);
   return (
     <SongDisplay
       song={song}
       onPress={() => {
-        if (selectedSongs.size === 0) {
+        if (!hasSelected) {
           playSong(song);
         } else {
           setSelected(song.uri, !isSelected);
@@ -30,13 +35,13 @@ const FileDetails: React.FC<Props> = ({song, selectedSongs, setSelected}) => {
       onLongPress={() => {
         setSelected(song.uri, true);
       }}>
-      {selectedSongs.size > 0 && (
-        <CheckBox
-          value={isSelected}
-          onChange={() => setSelected(song.uri, !isSelected)}
-          tintColors={{true: colors.primary, false: colors.border}}
-        />
-      )}
+      <CheckBox
+        style={{opacity: Number(hasSelected)}}
+        disabled={!hasSelected}
+        value={isSelected}
+        onChange={() => setSelected(song.uri, !isSelected)}
+        tintColors={{true: colors.primary, false: colors.border}}
+      />
     </SongDisplay>
   );
 };

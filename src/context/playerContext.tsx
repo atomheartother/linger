@@ -72,7 +72,7 @@ export const TrackPlayerContextProvider: React.FC<PropsWithChildren> = ({
           Capability.SkipToNext,
           Capability.SkipToPrevious,
         ],
-        progressUpdateEventInterval: 1,
+        progressUpdateEventInterval: 2,
       });
       setReady(true);
     };

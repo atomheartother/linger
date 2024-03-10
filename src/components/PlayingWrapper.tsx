@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useMemo} from 'react';
+import React, {PropsWithChildren, useMemo} from 'react';
 import {useTrackPlayer} from '../context/playerContext';
 import {Text, View} from 'react-native';
 import TrackPlayer, {
@@ -11,7 +11,6 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {useTheme} from '@react-navigation/native';
 import IconButton from './IconButton';
-import {useStats} from '../context/stats';
 
 const repeatModeIcon: {
   [key in RepeatMode]: string;
@@ -27,7 +26,7 @@ type PlayingProps = {
 
 function Playing({playing}: PlayingProps) {
   const {colors} = useTheme();
-  const progress = useProgress(1000);
+  const progress = useProgress(500);
   const {state: playbackState} = usePlaybackState();
   const {repeatMode, changeRepeatMode} = useTrackPlayer();
   const playedPercent = useMemo(() => {
@@ -66,7 +65,7 @@ function Playing({playing}: PlayingProps) {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <View>
+        <View style={{ flex: 1}}>
           <Text>{playing.title}</Text>
         </View>
         <View style={{flexDirection: 'row', gap: 8}}>

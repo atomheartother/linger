@@ -43,6 +43,8 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
     );
   };
 
+  const hasSelected = selectedSongs.size > 0;
+
   return (
     <View
       style={{
@@ -59,29 +61,34 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               : `${songs.length} files`}
           </Text>
         </View>
-        {selectedSongs.size > 0 && (
-          <View
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignContent: 'center',
-              gap: 16,
-            }}>
-            <IconButton onPress={selectAll} icon="select-all" size={20} />
-            <IconButton
-              onPress={invertSelection}
-              icon="select-inverse"
-              size={20}
-            />
-            <IconButton
-              onPress={() => setOpenModal(true)}
-              icon="playlist-plus"
-              size={20}
-            />
-          </View>
-        )}
+        <View
+          style={{
+            display: 'flex',
+            opacity: Number(hasSelected),
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignContent: 'center',
+            gap: 16,
+          }}>
+          <IconButton
+            disabled={!hasSelected}
+            onPress={selectAll}
+            icon="select-all"
+            size={24}
+          />
+          <IconButton
+            disabled={!hasSelected}
+            onPress={invertSelection}
+            icon="select-inverse"
+            size={24}
+          />
+          <IconButton
+            disabled={!hasSelected}
+            onPress={() => setOpenModal(true)}
+            icon="playlist-plus"
+            size={24}
+          />
+        </View>
       </ScreenHeader>
       <FlatList<MusicInfo>
         data={songs}
@@ -91,8 +98,9 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
           <FileDetails
             key={song.uri}
             song={song}
-            selectedSongs={selectedSongs}
             setSelected={setSelected}
+            isSelected={selectedSongs.has(song.uri)}
+            hasSelected={hasSelected}
           />
         )}
         style={{flex: 1}}
