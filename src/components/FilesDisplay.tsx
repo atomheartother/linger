@@ -94,6 +94,9 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         data={songs}
         refreshing={refreshing}
         onRefresh={refresh}
+        removeClippedSubviews
+        initialNumToRender={15}
+        windowSize={11}
         renderItem={({item: song}) => (
           <FileDetails
             key={song.uri}
@@ -103,6 +106,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
             hasSelected={hasSelected}
           />
         )}
+        extraData={selectedSongs}
         style={{flex: 1}}
       />
       <Dialog visible={openModal} onRequestClose={() => setOpenModal(false)}>
