@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { MMKV } from 'react-native-mmkv';
+import {MMKV} from 'react-native-mmkv';
 import {openDocumentTree} from 'react-native-scoped-storage';
 
 const storage = new MMKV();
