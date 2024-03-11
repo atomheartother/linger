@@ -1,11 +1,11 @@
 import {useTheme} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Text, TouchableNativeFeedback, View} from 'react-native';
-import {PlaylistSong, usePlaylists} from '../../context/playlistsContext';
+import {PlaylistSong} from '../../context/playlistsContext';
 import {MusicInfo} from '../../context/songsContext';
 import Dialog from '../Dialog';
-import {LingerButton, LingerInput, ModalContainer} from '../../containers';
 import SongDisplay from '../SongDisplay';
+import EditWeight from './EditWeight';
 
 type Props = {
   playlistId: number;
@@ -15,12 +15,7 @@ type Props = {
 
 export default function PlaylistSongDetails({playlistId, song, play}: Props) {
   const {colors} = useTheme();
-  const {editWeight} = usePlaylists();
   const [modalOpen, setModalOpen] = useState(false);
-  const [editedWeight, setEditedWeight] = useState(`${song.weight}`);
-  useEffect(() => {
-    setEditedWeight(`${song.weight}`);
-  }, [song]);
 
   return (
     <SongDisplay song={song} onPress={play}>
@@ -36,22 +31,11 @@ export default function PlaylistSongDetails({playlistId, song, play}: Props) {
         </View>
       </TouchableNativeFeedback>
       <Dialog visible={modalOpen} onRequestClose={() => setModalOpen(false)}>
-        <ModalContainer>
-          <Text>{song.filename} weight:</Text>
-          <LingerInput
-            value={editedWeight}
-            onChangeText={setEditedWeight}
-            inputMode="numeric"
-          />
-          <LingerButton
-            title="ok"
-            disabled={Number(editedWeight) < 1}
-            onPress={() => {
-              editWeight(playlistId, song.uri, Number(editedWeight));
-              setModalOpen(false);
-            }}
-          />
-        </ModalContainer>
+        <EditWeight
+          song={song}
+          playlistId={playlistId}
+          close={() => setModalOpen(false)}
+        />
       </Dialog>
     </SongDisplay>
   );
