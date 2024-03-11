@@ -9,10 +9,7 @@ export default function IconButton({icon, size, ...touchableProps}: Props) {
   const {colors} = useTheme();
   return (
     <View style={{borderRadius: size, overflow: 'hidden'}}>
-      <Pressable
-        style={{borderRadius: 20}}
-        android_ripple={{radius: size}}
-        {...touchableProps}>
+      <Pressable android_ripple={{radius: size}} {...touchableProps}>
         <View style={{padding: 2}}>
           <MUIIcon name={icon} size={size} />
         </View>
