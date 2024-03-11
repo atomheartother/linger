@@ -1,6 +1,6 @@
 import {useTheme} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Text, TouchableNativeFeedback, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import {PlaylistSong} from '../../context/playlistsContext';
 import {MusicInfo} from '../../context/songsContext';
 import Dialog from '../Dialog';
@@ -19,7 +19,7 @@ export default function PlaylistSongDetails({playlistId, song, play}: Props) {
 
   return (
     <SongDisplay song={song} onPress={play}>
-      <TouchableNativeFeedback onPress={() => setModalOpen(true)}>
+      <Pressable onPress={() => setModalOpen(true)}>
         <View
           style={{
             padding: 4,
@@ -29,7 +29,7 @@ export default function PlaylistSongDetails({playlistId, song, play}: Props) {
           }}>
           <Text>Weight: {song.weight}</Text>
         </View>
-      </TouchableNativeFeedback>
+      </Pressable>
       <Dialog visible={modalOpen} onRequestClose={() => setModalOpen(false)}>
         <EditWeight
           song={song}

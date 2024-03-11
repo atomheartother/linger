@@ -1,10 +1,5 @@
 import React, {useMemo} from 'react';
-import {
-  Text,
-  TouchableNativeFeedback,
-  TouchableNativeFeedbackProps,
-  View,
-} from 'react-native';
+import {Pressable, PressableProps, Text, View} from 'react-native';
 import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {MusicInfo} from '../context/songsContext';
 import {ListItem} from '../containers';
@@ -13,7 +8,7 @@ import {useActiveTrack} from 'react-native-track-player';
 import {useTheme} from '@react-navigation/native';
 import {useStats} from '../context/stats';
 
-type Props = TouchableNativeFeedbackProps & {
+type Props = PressableProps & {
   song: MusicInfo;
 };
 
@@ -22,8 +17,11 @@ export default function SongDisplay({song, children, ...props}: Props) {
   const {colors} = useTheme();
   const isActiveSong = useMemo(() => song.uri === track?.url, [song, track]);
   const {playStats} = useStats();
+  if (typeof children === 'function') {
+    throw new Error("SongDisplay can't take a function as a child.");
+  }
   return (
-    <TouchableNativeFeedback {...props}>
+    <Pressable android_ripple={{radius: 500}} {...props}>
       <ListItem>
         <MUIIcon
           color={colors.primary}
@@ -42,6 +40,6 @@ export default function SongDisplay({song, children, ...props}: Props) {
         </View>
         {children}
       </ListItem>
-    </TouchableNativeFeedback>
+    </Pressable>
   );
 }

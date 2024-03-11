@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableNativeFeedback} from 'react-native';
+import {Pressable} from 'react-native';
 import {Playlist} from '../context/playlistsContext';
 import {ListItem} from '../containers';
 import {ListItemMainContent} from '../texts';
@@ -11,14 +11,15 @@ type Props = {
 
 const PlaylistDetails: React.FC<Props> = ({playlist, navigate}) => {
   return (
-    <TouchableNativeFeedback
+    <Pressable
+      android_ripple={{radius: 500}}
       onPress={() => {
         navigate(playlist.id);
       }}>
       <ListItem>
         <ListItemMainContent>{playlist.name}</ListItemMainContent>
       </ListItem>
-    </TouchableNativeFeedback>
+    </Pressable>
   );
 };
 
