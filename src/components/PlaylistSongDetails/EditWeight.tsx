@@ -11,12 +11,13 @@ type Props = {
   close: () => void;
 };
 
-export default function EditWeight({playlistId, song}: Props) {
+export default function EditWeight({playlistId, song, close}: Props) {
   const {editWeight} = usePlaylists();
   const [editedWeight, setEditedWeight] = useState(`${song.weight}`);
   useEffect(() => {
     setEditedWeight(`${song.weight}`);
-  }, [song]);
+    close();
+  }, [song, close]);
   return (
     <ModalContainer>
       <Text>{song.filename} weight:</Text>

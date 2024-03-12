@@ -1,5 +1,5 @@
 import {useTheme} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
 import {PlaylistSong} from '../../context/playlistsContext';
 import {MusicInfo} from '../../context/songsContext';
@@ -17,6 +17,9 @@ export default function PlaylistSongDetails({playlistId, song, play}: Props) {
   const {colors} = useTheme();
   const [modalOpen, setModalOpen] = useState(false);
 
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+  }, []);
   return (
     <SongDisplay song={song} onPress={play}>
       <Pressable onPress={() => setModalOpen(true)}>
@@ -30,12 +33,8 @@ export default function PlaylistSongDetails({playlistId, song, play}: Props) {
           <Text>Weight: {song.weight}</Text>
         </View>
       </Pressable>
-      <Dialog visible={modalOpen} onRequestClose={() => setModalOpen(false)}>
-        <EditWeight
-          song={song}
-          playlistId={playlistId}
-          close={() => setModalOpen(false)}
-        />
+      <Dialog visible={modalOpen} onRequestClose={closeModal}>
+        <EditWeight song={song} playlistId={playlistId} close={closeModal} />
       </Dialog>
     </SongDisplay>
   );
