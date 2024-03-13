@@ -54,7 +54,6 @@ export function ScreenHeader({style, ...viewProps}: ViewProps) {
 
 export function LingerButton({...buttonProps}: ButtonProps) {
   const {colors} = useTheme();
-  const styles = useMemo(() => makeStyles(colors), [colors]);
 
   return <Button color={colors.primary} {...buttonProps} />;
 }
@@ -63,7 +62,14 @@ export function ModalContainer({style, ...modalProps}: ViewProps) {
   const {colors} = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
-  return <View style={[styles.modal, style]} {...modalProps} />;
+  return (
+    <View
+      onStartShouldSetResponder={() => true}
+      onTouchEnd={e => e.stopPropagation()}
+      style={[styles.modal, style]}
+      {...modalProps}
+    />
+  );
 }
 
 export function ListItem({style, ...itemProps}: ViewProps) {
