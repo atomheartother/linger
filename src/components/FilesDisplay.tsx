@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {FlatList, Text, View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import FileDetails from './FileDetails';
@@ -7,43 +7,25 @@ import Dialog from './Dialog';
 import CreatePlaylist from './CreatePlaylist';
 import {ScreenHeader} from '../containers';
 import IconButton from './IconButton';
+import useSelect from '../hooks/useSelect';
 
 type Props = {
   songs: MusicInfo[];
 };
+
+const getKeyFromSong = (song: MusicInfo) => song.uri;
 
 const FilesDisplay: React.FC<Props> = ({songs}) => {
   const [openModal, setOpenModal] = useState(false);
   const {colors} = useTheme();
   const {refresh, refreshing} = useSongs();
   // When selectedSongs is empty, select mode is inactive
-  const [selectedSongs, setSelectedSongs] = useState<Set<string>>(new Set());
-  const setSelected = useCallback(
-    (uri: string, selected: boolean) => {
-      const newSet = new Set(selectedSongs);
-      if (!selected) {
-        newSet.delete(uri);
-      } else {
-        newSet.add(uri);
-      }
-      setSelectedSongs(newSet);
-    },
-    [selectedSongs],
+  const {selected, toggleSelected, all, invert, none} = useSelect(
+    songs,
+    getKeyFromSong,
   );
 
-  const selectAll = () => {
-    setSelectedSongs(new Set(songs.map(({uri}) => uri)));
-  };
-
-  const invertSelection = () => {
-    setSelectedSongs(
-      new Set(
-        songs.filter(({uri}) => !selectedSongs.has(uri)).map(({uri}) => uri),
-      ),
-    );
-  };
-
-  const hasSelected = selectedSongs.size > 0;
+  const hasSelected = selected.size > 0;
 
   return (
     <View
@@ -56,8 +38,8 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
       <ScreenHeader>
         <View style={{flex: 1}}>
           <Text style={{fontSize: 18, fontWeight: '600'}}>
-            {selectedSongs.size > 0
-              ? `${selectedSongs.size} selected`
+            {selected.size > 0
+              ? `${selected.size} selected`
               : `${songs.length} files`}
           </Text>
         </View>
@@ -72,20 +54,20 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
           }}>
           <IconButton
             disabled={!hasSelected}
-            onPress={selectAll}
+            onPress={all}
             icon="select-all"
             size={24}
           />
           <IconButton
             disabled={!hasSelected}
-            onPress={invertSelection}
+            onPress={invert}
             icon="select-inverse"
             size={24}
           />
           <IconButton
             disabled={!hasSelected}
-            onPress={() => setOpenModal(true)}
-            icon="playlist-plus"
+            onPress={none}
+            icon="close"
             size={24}
           />
         </View>
@@ -101,21 +83,19 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
           <FileDetails
             key={song.uri}
             song={song}
-            setSelected={setSelected}
-            isSelected={selectedSongs.has(song.uri)}
+            setSelected={toggleSelected}
+            isSelected={selected.has(song.uri)}
             hasSelected={hasSelected}
           />
         )}
-        extraData={selectedSongs}
         style={{flex: 1}}
       />
       <Dialog visible={openModal} onRequestClose={() => setOpenModal(false)}>
         <CreatePlaylist
           close={() => {
             setOpenModal(false);
-            setSelectedSongs(new Set());
           }}
-          uris={[...selectedSongs]}
+          uris={[...selected]}
         />
       </Dialog>
     </View>
