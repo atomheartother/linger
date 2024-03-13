@@ -43,13 +43,13 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               ? `${selected.size} selected`
               : `${songs.length} files`}
           </Text>
-          <SelectionControls
-            hasSelected={hasSelected}
-            all={all}
-            invert={invert}
-            none={none}
-          />
         </View>
+        <SelectionControls
+          hasSelected={hasSelected}
+          all={all}
+          invert={invert}
+          none={none}
+        />
       </ScreenHeader>
       <FlatList<MusicInfo>
         data={songs}
