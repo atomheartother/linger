@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import {Playlist} from '../context/playlistsContext';
 import {ListItem} from '../containers';
 import {ListItemMainContent} from '../texts';
@@ -17,7 +17,10 @@ const PlaylistDetails: React.FC<Props> = ({playlist, navigate}) => {
         navigate(playlist.id);
       }}>
       <ListItem>
-        <ListItemMainContent>{playlist.name}</ListItemMainContent>
+        <View>
+          <ListItemMainContent>{playlist.name}</ListItemMainContent>
+          <Text style={{opacity: 0.6}}>{playlist.songs.length} songs</Text>
+        </View>
       </ListItem>
     </Pressable>
   );
