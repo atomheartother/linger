@@ -31,6 +31,7 @@ export default function PlaylistSongDetails({
   const closeModal = useCallback(() => {
     setModalOpen(false);
   }, []);
+
   return (
     <SongDisplay
       song={song}

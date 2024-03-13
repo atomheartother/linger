@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FlatList, ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 import {PlaylistSong, usePlaylists} from '../context/playlistsContext';
 import {useTheme} from '@react-navigation/native';
 import {
@@ -115,9 +115,8 @@ const PlaylistView: React.FC<
           </>
         )}
       </ScreenHeader>
-      <FlatList<MusicInfo & PlaylistSong>
-        data={songData}
-        renderItem={({item: song, index}) => (
+      <ScrollView style={{flex: 1}}>
+        {songData.map((song, index) => (
           <PlaylistSongDetails
             key={song.uri}
             song={song}
@@ -127,9 +126,8 @@ const PlaylistView: React.FC<
             hasSelected={hasSelected}
             isSelected={selected.has(song.uri)}
           />
-        )}
-        style={{flex: 1}}
-      />
+        ))}
+      </ScrollView>
       {selected.size > 0 && (
         <ActionBar>
           <IconButton
