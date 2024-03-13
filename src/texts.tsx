@@ -7,7 +7,7 @@ const makeStyles = (_colors: Theme['colors']) =>
   StyleSheet.create({
     listItemMainContent: {
       paddingVertical: 2,
-      fontWeight: '500',
+      fontWeight: '600',
     },
   });
 

@@ -131,7 +131,7 @@ const AllPlaylists: React.FC<
             <PlaylistDetails
               key={playlist.id}
               playlist={playlist}
-              navigate={navigate}
+              onPress={() => navigate(playlist.id)}
             />
           ))}
         </View>

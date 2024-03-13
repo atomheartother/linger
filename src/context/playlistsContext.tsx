@@ -27,7 +27,7 @@ type PlaylistsData = {
   createPlaylist: (p: Omit<Playlist, 'id'>) => void;
   deletePlaylist: (id: number) => void;
   renamePlaylist: (id: number, name: string) => void;
-  addToPlaylist: (id: number, url: string) => void;
+  addToPlaylist: (id: number, url: string[]) => void;
   editWeight: (id: number, url: string, weight: number) => void;
   removeFromPlaylist: (id: number, url: string) => void;
 };
@@ -99,7 +99,12 @@ export const PlaylistsContextProvider: React.FC<PropsWithChildren> = ({
       setPlaylists(
         updatedPlaylists(playlists, id, p => ({
           ...p,
-          songs: [...p.songs, {uri, weight: 1}],
+          songs: [
+            ...p.songs,
+            ...uri
+              .filter(u => !p.songs.find(s => s.uri === u))
+              .map(u => ({uri: u, weight: 1})),
+          ],
         })),
       );
     },

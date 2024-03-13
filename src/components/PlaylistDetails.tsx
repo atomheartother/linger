@@ -6,17 +6,17 @@ import {ListItemMainContent} from '../texts';
 
 type Props = {
   playlist: Playlist;
-  navigate: (id: number) => void;
+  onPress: () => void;
+  disabled?: boolean;
 };
 
-const PlaylistDetails: React.FC<Props> = ({playlist, navigate}) => {
+const PlaylistDetails: React.FC<Props> = ({playlist, onPress, disabled}) => {
   return (
     <Pressable
+      disabled={disabled}
       android_ripple={{radius: 500}}
-      onPress={() => {
-        navigate(playlist.id);
-      }}>
-      <ListItem>
+      onPress={onPress}>
+      <ListItem style={{opacity: disabled ? 0.6 : 1}}>
         <View>
           <ListItemMainContent>{playlist.name}</ListItemMainContent>
           <Text style={{opacity: 0.6}}>{playlist.songs.length} songs</Text>

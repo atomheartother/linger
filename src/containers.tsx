@@ -33,8 +33,6 @@ const makeStyles = (colors: Theme['colors']) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      borderBottomColor: colors.border,
-      borderBottomWidth: 1,
     },
     textInput: {
       borderWidth: 1,
