@@ -1,6 +1,6 @@
 import {useCallback, useMemo, useState} from 'react';
 
-type UseSelectData = {
+export type UseSelectData = {
   selected: Set<string>;
   toggleSelected: (key: string, value: boolean) => void;
   all: () => void;

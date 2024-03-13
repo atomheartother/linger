@@ -8,6 +8,7 @@ import CreatePlaylist from './CreatePlaylist';
 import {ActionBar, ScreenHeader} from '../containers';
 import IconButton from './IconButton';
 import useSelect from '../hooks/useSelect';
+import SelectionControls from './SelectionControls';
 
 type Props = {
   songs: MusicInfo[];
@@ -42,33 +43,11 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               ? `${selected.size} selected`
               : `${songs.length} files`}
           </Text>
-        </View>
-        <View
-          style={{
-            display: 'flex',
-            opacity: Number(hasSelected),
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignContent: 'center',
-            gap: 16,
-          }}>
-          <IconButton
-            disabled={!hasSelected}
-            onPress={all}
-            icon="select-all"
-            size={24}
-          />
-          <IconButton
-            disabled={!hasSelected}
-            onPress={invert}
-            icon="select-inverse"
-            size={24}
-          />
-          <IconButton
-            disabled={!hasSelected}
-            onPress={none}
-            icon="close"
-            size={24}
+          <SelectionControls
+            hasSelected={hasSelected}
+            all={all}
+            invert={invert}
+            none={none}
           />
         </View>
       </ScreenHeader>
