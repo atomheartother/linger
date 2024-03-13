@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 
 export type UseSelectData = {
   selected: Set<string>;
@@ -40,6 +40,10 @@ export default function useSelect<T>(
   const none = useCallback(() => {
     setSelected(new Set());
   }, []);
+
+  useEffect(() => {
+    none();
+  }, [data, none]);
 
   return useMemo(
     () => ({selected, toggleSelected, all, invert, none}),

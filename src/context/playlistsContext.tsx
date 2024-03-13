@@ -29,7 +29,7 @@ type PlaylistsData = {
   renamePlaylist: (id: number, name: string) => void;
   addToPlaylist: (id: number, url: string[]) => void;
   editWeight: (id: number, url: string, weight: number) => void;
-  removeFromPlaylist: (id: number, url: string) => void;
+  removeFromPlaylist: (id: number, urls: string[]) => void;
 };
 
 export const PlaylistsContext = createContext<PlaylistsData | undefined>(
@@ -114,11 +114,12 @@ export const PlaylistsContextProvider: React.FC<PropsWithChildren> = ({
   );
 
   const removeFromPlaylist: PlaylistsData['removeFromPlaylist'] = useCallback(
-    (id, uri) => {
+    (id, urls) => {
+      const toRemove = new Set(urls);
       setPlaylists(
         updatedPlaylists(playlists, id, p => ({
           ...p,
-          songs: p.songs.filter(s => s.uri !== uri),
+          songs: p.songs.filter(s => !toRemove.has(s.uri)),
         })),
       );
     },

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {FlatList, ScrollView, Text, View} from 'react-native';
 import {PlaylistSong, usePlaylists} from '../context/playlistsContext';
 import {useTheme} from '@react-navigation/native';
 import {
@@ -11,23 +11,31 @@ import {FileSystem} from 'react-native-file-access';
 import {MusicInfo} from '../context/songsContext';
 import PlaylistSongDetails from '../components/PlaylistSongDetails';
 import {useTrackPlayer} from '../context/playerContext';
-import {ScreenHeader} from '../containers';
+import {ActionBar, ScreenHeader} from '../containers';
 import PlayingWrapper from '../components/PlayingWrapper';
 import IconButton from '../components/IconButton';
 import TrackPlayer from 'react-native-track-player';
 import {truncateFileName} from '../utils';
 import type {PlaylistRouteParams} from './types';
+import useSelect from '../hooks/useSelect';
+import SelectionControls from '../components/SelectionControls';
 
 const Stack = createNativeStackNavigator<PlaylistRouteParams>();
+
+const keyFromSongData = (song: MusicInfo & PlaylistSong) => song.uri;
 
 const PlaylistView: React.FC<
   NativeStackScreenProps<PlaylistRouteParams, 'PlaylistView'>
 > = ({route}) => {
-  const {playlists} = usePlaylists();
+  const {playlists, removeFromPlaylist} = usePlaylists();
   const {addSongs} = useTrackPlayer();
   const {colors} = useTheme();
   const [songData, setSongData] = React.useState<(MusicInfo & PlaylistSong)[]>(
     [],
+  );
+  const {selected, toggleSelected, all, none, invert} = useSelect(
+    songData,
+    keyFromSongData,
   );
   const playlist = React.useMemo(() => {
     const res = playlists.find(p => p.id === route.params.id);
@@ -74,33 +82,63 @@ const PlaylistView: React.FC<
     readFiles();
   }, [playlist]);
 
+  const hasSelected = selected.size > 0;
+
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <ScreenHeader>
-        <View>
-          <Text style={{fontWeight: 'bold'}}>{playlist.name}</Text>
-          <Text style={{opacity: 0.6}}>{playlist.songs.length} songs</Text>
-        </View>
-        <View style={{flexDirection: 'row', gap: 2}}>
-          <IconButton
-            icon="shuffle-variant"
-            size={20}
-            onPress={playRandomQueue}
-          />
-        </View>
-      </ScreenHeader>
-      <ScrollView>
-        <View style={{flex: 1}}>
-          {songData.map((song, idx) => (
-            <PlaylistSongDetails
-              key={song.uri}
-              song={song}
-              playlistId={playlist.id}
-              play={() => playFromIndex(idx)}
+        {!hasSelected ? (
+          <>
+            <View>
+              <Text style={{fontWeight: 'bold'}}>{playlist.name}</Text>
+              <Text style={{opacity: 0.6}}>{playlist.songs.length} songs</Text>
+            </View>
+            <View style={{flexDirection: 'row', gap: 2}}>
+              <IconButton
+                icon="shuffle-variant"
+                size={20}
+                onPress={playRandomQueue}
+              />
+            </View>
+          </>
+        ) : (
+          <>
+            <Text style={{fontSize: 18, fontWeight: '600'}}>
+              {selected.size} selected
+            </Text>
+            <SelectionControls
+              hasSelected={hasSelected}
+              all={all}
+              none={none}
+              invert={invert}
             />
-          ))}
-        </View>
-      </ScrollView>
+          </>
+        )}
+      </ScreenHeader>
+      <FlatList<MusicInfo & PlaylistSong>
+        data={songData}
+        renderItem={({item: song, index}) => (
+          <PlaylistSongDetails
+            key={song.uri}
+            song={song}
+            toggleSelected={toggleSelected}
+            playlistId={playlist.id}
+            play={() => playFromIndex(index)}
+            hasSelected={hasSelected}
+            isSelected={selected.has(song.uri)}
+          />
+        )}
+        style={{flex: 1}}
+      />
+      {selected.size > 0 && (
+        <ActionBar>
+          <IconButton
+            icon="trash-can-outline"
+            size={24}
+            onPress={() => removeFromPlaylist(playlist.id, [...selected])}
+          />
+        </ActionBar>
+      )}
     </View>
   );
 };
