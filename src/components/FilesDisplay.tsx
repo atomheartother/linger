@@ -5,7 +5,7 @@ import FileDetails from './FileDetails';
 import {MusicInfo, useSongs} from '../context/songsContext';
 import Dialog from './Dialog';
 import CreatePlaylist from './CreatePlaylist';
-import {ScreenHeader} from '../containers';
+import {ActionBar, ScreenHeader} from '../containers';
 import IconButton from './IconButton';
 import useSelect from '../hooks/useSelect';
 
@@ -90,10 +90,20 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
         )}
         style={{flex: 1}}
       />
+      {selected.size > 0 && (
+        <ActionBar>
+          <IconButton
+            icon="playlist-plus"
+            size={24}
+            onPress={() => setOpenModal(true)}
+          />
+        </ActionBar>
+      )}
       <Dialog visible={openModal} onRequestClose={() => setOpenModal(false)}>
         <CreatePlaylist
           close={() => {
             setOpenModal(false);
+            none();
           }}
           uris={[...selected]}
         />

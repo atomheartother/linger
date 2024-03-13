@@ -16,11 +16,7 @@ import PlayingWrapper from '../components/PlayingWrapper';
 import IconButton from '../components/IconButton';
 import TrackPlayer from 'react-native-track-player';
 import {truncateFileName} from '../utils';
-
-type PlaylistRouteParams = {
-  AllPlaylists: undefined;
-  PlaylistView: {id: number};
-};
+import type {PlaylistRouteParams} from './types';
 
 const Stack = createNativeStackNavigator<PlaylistRouteParams>();
 

@@ -11,6 +11,7 @@ import {PlaylistsContextProvider} from './context/playlistsContext';
 import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {LingerButton, ScreenHeader} from './containers';
 import {StatsContextProvider} from './context/stats';
+import type {RootTabsParams} from './routes/types';
 
 function SettingsScreen() {
   const {promptForDir} = useSettings();
@@ -24,7 +25,7 @@ function SettingsScreen() {
   );
 }
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootTabsParams>();
 
 const MyTheme: Theme = {
   ...DarkTheme,

@@ -41,6 +41,14 @@ const makeStyles = (colors: Theme['colors']) =>
       padding: 2,
       paddingLeft: 8,
     },
+    actionBar: {
+      borderTopWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.background,
+      padding: 8,
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
   });
 
 export function ScreenHeader({style, ...viewProps}: ViewProps) {
@@ -82,4 +90,11 @@ export function LingerInput({style, ...inputProps}: TextInputProps) {
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
   return <TextInput style={[styles.textInput, style]} {...inputProps} />;
+}
+
+export function ActionBar({style, ...viewProps}: ViewProps) {
+  const {colors} = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
+
+  return <View style={[styles.actionBar, style]} {...viewProps} />;
 }

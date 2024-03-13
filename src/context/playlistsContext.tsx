@@ -24,7 +24,7 @@ export type Playlist = {
 
 type PlaylistsData = {
   playlists: Playlist[];
-  createPlaylist: (p: Omit<Playlist, 'id'>) => void;
+  createPlaylist: (p: Omit<Playlist, 'id'>) => Playlist;
   deletePlaylist: (id: number) => void;
   renamePlaylist: (id: number, name: string) => void;
   addToPlaylist: (id: number, url: string[]) => void;
@@ -74,8 +74,10 @@ export const PlaylistsContextProvider: React.FC<PropsWithChildren> = ({
 
   const createPlaylist: PlaylistsData['createPlaylist'] = useCallback(
     p => {
-      setPlaylists([...playlists, {id: highestId, ...p}]);
+      const newPlaylist: Playlist = {id: highestId, ...p};
+      setPlaylists([...playlists, newPlaylist]);
       setHighestId(highestId + 1);
+      return newPlaylist;
     },
     [playlists, highestId],
   );

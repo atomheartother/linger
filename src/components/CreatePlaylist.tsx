@@ -11,6 +11,7 @@ import {
 } from '../containers';
 import PlaylistDetails from './PlaylistDetails';
 import {ListItemMainContent} from '../texts';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   close: () => void;
@@ -23,6 +24,7 @@ export default function CreatePlaylist({close, uris}: Props) {
   const [screen, setScreen] = useState<Screen>('select');
   const [name, setName] = useState('');
   const {createPlaylist, playlists, addToPlaylist} = usePlaylists();
+  const {navigate} = useNavigation();
 
   if (screen === 'select') {
     return (
@@ -36,6 +38,10 @@ export default function CreatePlaylist({close, uris}: Props) {
               onPress={() => {
                 addToPlaylist(playlist.id, uris);
                 close();
+                navigate('Playlists', {
+                  screen: 'PlaylistView',
+                  params: {id: playlist.id},
+                });
               }}
               disabled={uris.every(u => playlist.songs.find(s => s.uri === u))}
             />
@@ -60,8 +66,15 @@ export default function CreatePlaylist({close, uris}: Props) {
       <LingerButton
         disabled={name.length < 1}
         onPress={() => {
-          createPlaylist({name, songs: uris.map(uri => ({uri, weight: 1}))});
+          const {id} = createPlaylist({
+            name,
+            songs: uris.map(uri => ({uri, weight: 1})),
+          });
           close();
+          navigate('Playlists', {
+            screen: 'PlaylistView',
+            params: {id},
+          });
         }}
         title="Create"
       />
