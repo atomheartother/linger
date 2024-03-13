@@ -22,7 +22,10 @@ export default function PlaylistSongDetails({playlistId, song, play}: Props) {
   }, []);
   return (
     <SongDisplay song={song} onPress={play}>
-      <Pressable onPress={() => setModalOpen(true)}>
+      <Pressable
+        onPress={() => {
+          setModalOpen(true);
+        }}>
         <View
           style={{
             padding: 4,

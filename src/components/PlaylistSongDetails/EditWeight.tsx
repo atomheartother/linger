@@ -16,8 +16,7 @@ export default function EditWeight({playlistId, song, close}: Props) {
   const [editedWeight, setEditedWeight] = useState(`${song.weight}`);
   useEffect(() => {
     setEditedWeight(`${song.weight}`);
-    close();
-  }, [song, close]);
+  }, [song]);
   return (
     <ModalContainer>
       <Text>{song.filename} weight:</Text>
@@ -31,6 +30,7 @@ export default function EditWeight({playlistId, song, close}: Props) {
         disabled={Number(editedWeight) < 1}
         onPress={() => {
           editWeight(playlistId, song.uri, Number(editedWeight));
+          close();
         }}
       />
     </ModalContainer>
