@@ -19,3 +19,20 @@ export function duration(n: number) {
   const seconds = int % 60;
   return `${minutes}:${padNumber(seconds)}`;
 }
+
+type FunctionWithArgs = (...args: any) => any;
+
+export function debounce<F extends FunctionWithArgs>(
+  fn: (...args: Parameters<F>) => ReturnType<F>,
+  ms: number,
+): (...args: Parameters<F>) => Promise<ReturnType<F>> {
+  let timer: ReturnType<typeof setTimeout>;
+
+  return (...args: Parameters<F>) =>
+    new Promise(resolve => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => resolve(fn(...args)), ms);
+    });
+}
