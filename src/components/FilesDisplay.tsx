@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {FlatList, Text, TextInput, View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import FileDetails from './FileDetails';
@@ -21,7 +21,6 @@ const getQueryFromSong = (song: MusicInfo) => song.filename;
 
 const FilesDisplay: React.FC<Props> = ({songs}) => {
   const [openModal, setOpenModal] = useState(false);
-  const [editingFilter, setEditingFilter] = useState(false);
   const {colors} = useTheme();
   const {refresh, refreshing} = useSongs();
   // When selectedSongs is empty, select mode is inactive
@@ -30,14 +29,10 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
     getKeyFromSong,
   );
 
-  const {data, query, setQuery} = useFilters(songs, getQueryFromSong);
-
-  const [queryString, setQueryString] = useState(query);
-
-  useEffect(() => {
-    setQuery(queryString);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryString]);
+  const {data, query, setQuery, editingFilter, setEditingFilter} = useFilters(
+    songs,
+    getQueryFromSong,
+  );
 
   const hasSelected = selected.size > 0;
 
@@ -67,10 +62,10 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
               onPress={() => setEditingFilter(false)}
             />
             <TextInput
-              value={queryString}
+              value={query}
               placeholder="Search..."
               inputMode="search"
-              onChangeText={setQueryString}
+              onChangeText={setQuery}
               onSubmitEditing={() => setEditingFilter(false)}
               autoFocus
               blurOnSubmit
@@ -88,7 +83,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
           <FilterControls
             editingFilter={editingFilter}
             setEditingFilter={setEditingFilter}
-            clearQueryString={() => setQueryString('')}
+            clearQueryString={() => setQuery('')}
           />
         )}
       </ScreenHeader>

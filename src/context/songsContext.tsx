@@ -43,10 +43,12 @@ export const SongsContextProvider: React.FC<PropsWithChildren> = ({
     const uris = files.map(f => AndroidScoped.appendPath(dirUri, f));
 
     setAllSongs(
-      files.map((f, i) => ({
-        filename: truncateFileName(f),
-        uri: uris[i],
-      })),
+      files
+        .map((f, i) => ({
+          filename: truncateFileName(f),
+          uri: uris[i],
+        }))
+        .sort((a, b) => a.filename.localeCompare(b.filename)),
     );
     setRefreshing(false);
   }, [dirUri]);

@@ -1,17 +1,46 @@
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {debounce} from '../utils';
-
-export enum SortOrder {
-  ASCENDING = 1,
-  DESCENDING = -1,
-}
+import {BackHandler, NativeEventSubscription} from 'react-native';
 
 export default function useFilters<T>(
   data: T[],
   getQueryField: (x: T) => string,
 ) {
   const [query, setQuery] = useState('');
-  const [sortOrder, setOrder] = useState<SortOrder>(SortOrder.ASCENDING);
+  const [queryString, setQueryString] = useState(query);
+  const debouncedSetQuery = useMemo(() => debounce(setQuery, 300), []);
+  const [editingFilter, setEditingFilter] = useState(false);
+  const backHandler = useRef<NativeEventSubscription | null>(null);
+  useEffect(() => {
+    debouncedSetQuery(queryString);
+  }, [queryString, debouncedSetQuery]);
+  useEffect(() => {
+    if (!editingFilter) {
+      setQuery('');
+    }
+  }, [editingFilter]);
+  useEffect(() => {
+    const {current} = backHandler;
+    if (current) {
+      current.remove();
+    }
+    backHandler.current = null;
+    if (editingFilter) {
+      backHandler.current = BackHandler.addEventListener(
+        'hardwareBackPress',
+        function () {
+          setEditingFilter(false);
+          return true;
+        },
+      );
+    }
+    return () => {
+      const {current: currentHandler} = backHandler;
+      if (currentHandler) {
+        currentHandler.remove();
+      }
+    };
+  }, [editingFilter]);
   // We filter down via the query
   const filteredData = useMemo(() => {
     if (!query) {
@@ -25,29 +54,14 @@ export default function useFilters<T>(
     );
   }, [data, query, getQueryField]);
 
-  const sortedData = useMemo(() => {
-    /*
-     *      a < b   a==b    a > b
-     * ASC   -1      0        1
-     * DESC   1      0        -1
-     */
-    return filteredData.sort((a, b) => {
-      const stringA = getQueryField(a).toLowerCase();
-      const stringB = getQueryField(b).toLowerCase();
-      const isNeg = Number(stringA < stringB);
-      const isPos = Number(stringA > stringB);
-      return sortOrder * (isNeg * -1 + isPos * 1);
-    });
-  }, [filteredData, getQueryField, sortOrder]);
-
   return useMemo(
     () => ({
-      data: sortedData,
-      query,
-      setQuery: debounce(setQuery, 300),
-      sortOrder,
-      setOrder,
+      data: filteredData,
+      query: queryString,
+      setQuery: setQueryString,
+      editingFilter,
+      setEditingFilter,
     }),
-    [sortedData, query, setQuery, sortOrder, setOrder],
+    [editingFilter, setEditingFilter, filteredData, queryString],
   );
 }
