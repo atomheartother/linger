@@ -16,7 +16,7 @@ export default function useFilters<T>(
   }, [queryString, debouncedSetQuery]);
   useEffect(() => {
     if (!editingFilter) {
-      setQuery('');
+      setQueryString('');
     }
   }, [editingFilter]);
   useEffect(() => {
