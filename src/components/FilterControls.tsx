@@ -1,6 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
 import IconButton from './IconButton';
+import {ControlsContainer} from '../containers';
 
 type Props = {
   editingFilter: boolean;
@@ -13,22 +13,15 @@ export default function FilterControls({
   clearQueryString,
 }: Props) {
   return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignContent: 'center',
-        gap: 16,
-      }}>
+    <ControlsContainer>
       <IconButton
         onPress={() =>
-          editingFilter ? clearQueryString() : setEditingFilter(!editingFilter)
+          editingFilter ? clearQueryString() : setEditingFilter(true)
         }
         icon={editingFilter ? 'close' : 'search'}
         library="mui"
         size={24}
       />
-    </View>
+    </ControlsContainer>
   );
 }

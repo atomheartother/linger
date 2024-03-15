@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {FlatList, Text, TextInput, View} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import FileDetails from './FileDetails';
 import {MusicInfo, useSongs} from '../context/songsContext';
@@ -11,6 +11,7 @@ import useSelect from '../hooks/useSelect';
 import SelectionControls from './SelectionControls';
 import useFilters from '../hooks/useFilters';
 import FilterControls from './FilterControls';
+import SearchBar from './SearchBar';
 
 type Props = {
   songs: MusicInfo[];
@@ -54,28 +55,11 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
             </Text>
           </View>
         ) : (
-          <View style={{flex: 1, flexDirection: 'row', gap: 16}}>
-            <IconButton
-              library="mui"
-              icon="arrow-back"
-              size={24}
-              onPress={() => setEditingFilter(false)}
-            />
-            <TextInput
-              value={query}
-              placeholder="Search..."
-              inputMode="search"
-              onChangeText={setQuery}
-              onSubmitEditing={() => setEditingFilter(false)}
-              autoFocus
-              blurOnSubmit
-              onBlur={() => setEditingFilter(false)}
-              style={{
-                padding: 3,
-                flex: 1,
-              }}
-            />
-          </View>
+          <SearchBar
+            query={query}
+            setQuery={setQuery}
+            setEditingFilter={setEditingFilter}
+          />
         )}
         {hasSelected ? (
           <SelectionControls all={all} invert={invert} none={none} />

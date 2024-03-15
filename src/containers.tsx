@@ -34,6 +34,12 @@ const makeStyles = (colors: Theme['colors']) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    controlsContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignContent: 'center',
+      gap: 16,
+    },
     textInput: {
       borderWidth: 1,
       borderColor: colors.text,
@@ -97,4 +103,11 @@ export function ActionBar({style, ...viewProps}: ViewProps) {
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
   return <View style={[styles.actionBar, style]} {...viewProps} />;
+}
+
+export function ControlsContainer({style, ...viewProps}: ViewProps) {
+  const {colors} = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
+
+  return <View style={[styles.controlsContainer, style]} {...viewProps} />;
 }
