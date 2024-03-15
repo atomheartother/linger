@@ -12,8 +12,8 @@ export default function SelectionControls({all, invert, none}: Props) {
   return (
     <ControlsContainer>
       <IconButton onPress={all} icon="select-all" size={24} />
-      <IconButton onPress={invert} icon="select-inverse" size={24} />
-      <IconButton onPress={none} icon="close" size={24} />
+      <IconButton onPress={invert} icon="copy-all" size={24} />
+      <IconButton onPress={none} icon="deselect" size={24} />
     </ControlsContainer>
   );
 }

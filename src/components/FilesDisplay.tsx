@@ -92,7 +92,7 @@ const FilesDisplay: React.FC<Props> = ({songs}) => {
       {selected.size > 0 && (
         <ActionBar>
           <IconButton
-            icon="playlist-plus"
+            icon="playlist-add"
             size={24}
             onPress={() => setOpenModal(true)}
           />

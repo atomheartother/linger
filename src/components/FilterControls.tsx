@@ -19,7 +19,6 @@ export default function FilterControls({
           editingFilter ? clearQueryString() : setEditingFilter(true)
         }
         icon={editingFilter ? 'close' : 'search'}
-        library="mui"
         size={24}
       />
     </ControlsContainer>

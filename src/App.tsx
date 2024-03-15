@@ -8,10 +8,10 @@ import {TrackPlayerContextProvider} from './context/playerContext';
 import {SongsContextProvider} from './context/songsContext';
 import Playlists from './routes/Playlists';
 import {PlaylistsContextProvider} from './context/playlistsContext';
-import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MUIIcon from 'react-native-vector-icons/MaterialIcons';
 import {LingerButton, ScreenHeader} from './containers';
 import {StatsContextProvider} from './context/stats';
-import type {RootTabsParams} from './routes/types';
+import type {RootBottomTabsParams} from './routes/types';
 
 function SettingsScreen() {
   const {promptForDir} = useSettings();
@@ -25,7 +25,7 @@ function SettingsScreen() {
   );
 }
 
-const Tab = createBottomTabNavigator<RootTabsParams>();
+const Tab = createBottomTabNavigator<RootBottomTabsParams>();
 
 const MyTheme: Theme = {
   ...DarkTheme,
@@ -55,11 +55,7 @@ function App() {
                     options={{
                       tabBarLabel: 'Songs',
                       tabBarIcon: ({color, size}) => (
-                        <MUIIcon
-                          name="music-box-outline"
-                          size={size}
-                          color={color}
-                        />
+                        <MUIIcon name="music-note" size={size} color={color} />
                       ),
                     }}
                   />
@@ -68,11 +64,7 @@ function App() {
                     component={Playlists}
                     options={{
                       tabBarIcon: ({color, size}) => (
-                        <MUIIcon
-                          name="playlist-music"
-                          size={size}
-                          color={color}
-                        />
+                        <MUIIcon name="menu" size={size} color={color} />
                       ),
                     }}
                   />
@@ -81,7 +73,7 @@ function App() {
                     component={SettingsScreen}
                     options={{
                       tabBarIcon: ({color, size}) => (
-                        <MUIIcon name="cog" size={size} color={color} />
+                        <MUIIcon name="settings" size={size} color={color} />
                       ),
                     }}
                   />

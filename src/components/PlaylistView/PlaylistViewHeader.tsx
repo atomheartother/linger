@@ -61,24 +61,16 @@ function HeaderRight({
     return <SelectionControls all={all} none={none} invert={invert} />;
   }
   if (editingFilter) {
-    return (
-      <IconButton
-        onPress={() => setQuery('')}
-        icon="close"
-        library="mui"
-        size={24}
-      />
-    );
+    return <IconButton onPress={() => setQuery('')} icon="close" size={24} />;
   }
   return (
     <ControlsContainer>
       <IconButton
         onPress={() => setEditingFilter(true)}
         icon="search"
-        library="mui"
         size={24}
       />
-      <IconButton icon="shuffle-variant" size={20} onPress={playRandomQueue} />
+      <IconButton icon="shuffle" size={20} onPress={playRandomQueue} />
     </ControlsContainer>
   );
 }

@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import {Pressable, PressableProps, Text, View} from 'react-native';
-import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MUIIcon from 'react-native-vector-icons/MaterialIcons';
 import {MusicInfo} from '../context/songsContext';
 import {ListItem} from '../containers';
 import {ListItemMainContent} from '../texts';
@@ -25,7 +25,7 @@ export default function SongDisplay({song, children, ...props}: Props) {
       <ListItem>
         <MUIIcon
           color={colors.primary}
-          name="play"
+          name="play-arrow"
           style={{opacity: Number(isActiveSong)}}
           size={22}
         />

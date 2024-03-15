@@ -11,13 +11,14 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {useTheme} from '@react-navigation/native';
 import IconButton from './IconButton';
+import {ControlsContainer} from '../containers';
 
 const repeatModeIcon: {
   [key in RepeatMode]: string;
 } = {
-  [RepeatMode.Off]: 'repeat-off',
+  [RepeatMode.Off]: 'repeat',
   [RepeatMode.Queue]: 'repeat',
-  [RepeatMode.Track]: 'repeat-once',
+  [RepeatMode.Track]: 'repeat-one',
 };
 
 type PlayingProps = {
@@ -65,12 +66,12 @@ function Playing({playing}: PlayingProps) {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <View style={{ flex: 1}}>
+        <View style={{flex: 1}}>
           <Text>{playing.title}</Text>
         </View>
-        <View style={{flexDirection: 'row', gap: 8}}>
+        <ControlsContainer>
           <IconButton
-            icon={playbackState === State.Playing ? 'pause' : 'play'}
+            icon={playbackState === State.Playing ? 'pause' : 'play-arrow'}
             size={24}
             onPress={() =>
               playbackState === State.Playing
@@ -79,11 +80,12 @@ function Playing({playing}: PlayingProps) {
             }
           />
           <IconButton
+            style={{opacity: repeatMode === RepeatMode.Off ? 0.6 : 1}}
             icon={repeatModeIcon[repeatMode]}
             size={24}
             onPress={cycleRepeatMode}
           />
-        </View>
+        </ControlsContainer>
       </View>
     </View>
   );

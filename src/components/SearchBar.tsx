@@ -12,7 +12,6 @@ export default function SearchBar({query, setQuery, setEditingFilter}: Props) {
   return (
     <View style={{flex: 1, flexDirection: 'row', gap: 16}}>
       <IconButton
-        library="mui"
         icon="arrow-back"
         size={24}
         onPress={() => setEditingFilter(false)}

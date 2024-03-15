@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState} from 'react';
 import {Pressable, ScrollView, Text} from 'react-native';
-import MUIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MUIIcon from 'react-native-vector-icons/MaterialIcons';
 import {usePlaylists} from '../context/playlistsContext';
 import {
   LingerButton,
@@ -50,7 +50,7 @@ export default function CreatePlaylist({close, uris}: Props) {
             android_ripple={{radius: 500}}
             onPress={() => setScreen('create')}>
             <ListItem style={{justifyContent: 'flex-start', gap: 1}}>
-              <MUIIcon name="plus" size={16} />
+              <MUIIcon name="add" size={16} />
               <ListItemMainContent>New playlist</ListItemMainContent>
             </ListItem>
           </Pressable>

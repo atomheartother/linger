@@ -109,7 +109,7 @@ export default function PlaylistView({
       {selected.size > 0 && (
         <ActionBar>
           <IconButton
-            icon="trash-can-outline"
+            icon="delete"
             size={24}
             onPress={() => removeFromPlaylist(playlist.id, [...selected])}
           />
