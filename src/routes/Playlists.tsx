@@ -9,8 +9,8 @@ import {
 import PlaylistDetails from '../components/PlaylistDetails';
 import {ScreenHeader} from '../containers';
 import PlayingWrapper from '../components/PlayingWrapper';
-import type {PlaylistRouteParams} from './types';
 import PlaylistView from '../components/PlaylistView';
+import type {PlaylistRouteParams} from './types';
 
 const Stack = createNativeStackNavigator<PlaylistRouteParams>();
 

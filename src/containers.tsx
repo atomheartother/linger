@@ -54,7 +54,7 @@ const makeStyles = (colors: Theme['colors']) =>
       padding: 8,
       justifyContent: 'center',
       alignItems: 'center',
-    }
+    },
   });
 
 export function ScreenHeader({style, ...viewProps}: ViewProps) {

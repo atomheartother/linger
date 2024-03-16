@@ -1,6 +1,6 @@
 import React, {PropsWithChildren, useMemo} from 'react';
 import {useTrackPlayer} from '../context/playerContext';
-import {Text, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import TrackPlayer, {
   RepeatMode,
   State,
@@ -9,9 +9,10 @@ import TrackPlayer, {
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
-import {useTheme} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import IconButton from './IconButton';
 import {ControlsContainer} from '../containers';
+import FakeAlbumArt from './FakeAlbumArt';
 
 const repeatModeIcon: {
   [key in RepeatMode]: string;
@@ -27,6 +28,7 @@ type PlayingProps = {
 
 function Playing({playing}: PlayingProps) {
   const {colors} = useTheme();
+  const navigation = useNavigation();
   const progress = useProgress(500);
   const {state: playbackState} = usePlaybackState();
   const {repeatMode, changeRepeatMode} = useTrackPlayer();
@@ -59,34 +61,45 @@ function Playing({playing}: PlayingProps) {
         />
         <View style={{height: '100%', width: `${100 - playedPercent}%`}} />
       </View>
-      <View
-        style={{
-          padding: 16,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <View style={{flex: 1}}>
-          <Text>{playing.title}</Text>
+      <Pressable onPress={() => navigation.navigate('Player')}>
+        <View
+          style={{
+            padding: 8,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flex: 1,
+              gap: 8,
+            }}>
+            <FakeAlbumArt iconSize="medium" />
+            <View style={{flex: 1}}>
+              <Text>{playing.title}</Text>
+            </View>
+          </View>
+          <ControlsContainer>
+            <IconButton
+              icon={playbackState === State.Playing ? 'pause' : 'play-arrow'}
+              size={24}
+              onPress={() =>
+                playbackState === State.Playing
+                  ? TrackPlayer.pause()
+                  : TrackPlayer.play()
+              }
+            />
+            <IconButton
+              style={{opacity: repeatMode === RepeatMode.Off ? 0.6 : 1}}
+              icon={repeatModeIcon[repeatMode]}
+              size={24}
+              onPress={cycleRepeatMode}
+            />
+          </ControlsContainer>
         </View>
-        <ControlsContainer>
-          <IconButton
-            icon={playbackState === State.Playing ? 'pause' : 'play-arrow'}
-            size={24}
-            onPress={() =>
-              playbackState === State.Playing
-                ? TrackPlayer.pause()
-                : TrackPlayer.play()
-            }
-          />
-          <IconButton
-            style={{opacity: repeatMode === RepeatMode.Off ? 0.6 : 1}}
-            icon={repeatModeIcon[repeatMode]}
-            size={24}
-            onPress={cycleRepeatMode}
-          />
-        </ControlsContainer>
-      </View>
+      </Pressable>
     </View>
   );
 }
@@ -94,7 +107,7 @@ function Playing({playing}: PlayingProps) {
 export default function PlayingWrapper({children}: PropsWithChildren) {
   const track = useActiveTrack();
   return (
-    <View style={{flex: 1, display: 'flex'}}>
+    <View style={{flex: 1}}>
       {children}
       {track && <Playing playing={track} />}
     </View>

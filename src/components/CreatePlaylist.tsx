@@ -38,9 +38,12 @@ export default function CreatePlaylist({close, uris}: Props) {
               onPress={() => {
                 addToPlaylist(playlist.id, uris);
                 close();
-                navigate('Playlists', {
-                  screen: 'PlaylistView',
-                  params: {id: playlist.id},
+                navigate('Main', {
+                  screen: 'Playlists',
+                  params: {
+                    screen: 'PlaylistView',
+                    params: {id: playlist.id},
+                  },
                 });
               }}
               disabled={uris.every(u => playlist.songs.find(s => s.uri === u))}

@@ -1,31 +1,16 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
 import {DarkTheme, NavigationContainer, Theme} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {SettingsContextProvider, useSettings} from './context/settingsContext';
-import Home from './routes/Home';
+import {SettingsContextProvider} from './context/settingsContext';
 import {TrackPlayerContextProvider} from './context/playerContext';
 import {SongsContextProvider} from './context/songsContext';
-import Playlists from './routes/Playlists';
 import {PlaylistsContextProvider} from './context/playlistsContext';
-import MUIIcon from 'react-native-vector-icons/MaterialIcons';
-import {LingerButton, ScreenHeader} from './containers';
 import {StatsContextProvider} from './context/stats';
-import type {RootBottomTabsParams} from './routes/types';
+import type {RootStackParams} from './routes/types';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MainNavigation from './routes/MainNavigation';
+import Player from './routes/Player';
 
-function SettingsScreen() {
-  const {promptForDir} = useSettings();
-  return (
-    <View style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-      <ScreenHeader>
-        <Text>Settings</Text>
-      </ScreenHeader>
-      <LingerButton onPress={promptForDir} title="Change music directory" />
-    </View>
-  );
-}
-
-const Tab = createBottomTabNavigator<RootBottomTabsParams>();
+const Stack = createNativeStackNavigator<RootStackParams>();
 
 const MyTheme: Theme = {
   ...DarkTheme,
@@ -43,41 +28,12 @@ function App() {
           <TrackPlayerContextProvider>
             <PlaylistsContextProvider>
               <NavigationContainer theme={MyTheme}>
-                <Tab.Navigator
-                  initialRouteName="Home"
-                  screenOptions={{
-                    headerShown: false,
-                    tabBarStyle: {paddingBottom: 2},
-                  }}>
-                  <Tab.Screen
-                    name="Home"
-                    component={Home}
-                    options={{
-                      tabBarLabel: 'Songs',
-                      tabBarIcon: ({color, size}) => (
-                        <MUIIcon name="music-note" size={size} color={color} />
-                      ),
-                    }}
-                  />
-                  <Tab.Screen
-                    name="Playlists"
-                    component={Playlists}
-                    options={{
-                      tabBarIcon: ({color, size}) => (
-                        <MUIIcon name="menu" size={size} color={color} />
-                      ),
-                    }}
-                  />
-                  <Tab.Screen
-                    name="Settings"
-                    component={SettingsScreen}
-                    options={{
-                      tabBarIcon: ({color, size}) => (
-                        <MUIIcon name="settings" size={size} color={color} />
-                      ),
-                    }}
-                  />
-                </Tab.Navigator>
+                <Stack.Navigator
+                  initialRouteName="Main"
+                  screenOptions={{headerShown: false}}>
+                  <Stack.Screen name="Main" component={MainNavigation} />
+                  <Stack.Screen name="Player" component={Player} />
+                </Stack.Navigator>
               </NavigationContainer>
             </PlaylistsContextProvider>
           </TrackPlayerContextProvider>

@@ -5,7 +5,7 @@ import {useTheme} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {MusicInfo} from '../../context/songsContext';
 import useSelect from '../../hooks/useSelect';
-import {PlaylistRouteParams} from '../../routes/types';
+import {RootStackParams} from '../../routes/types';
 import TrackPlayer from 'react-native-track-player';
 import {truncateFileName} from '../../utils';
 import useFilters from '../../hooks/useFilters';
@@ -22,7 +22,7 @@ const getQueryFromSong = (x: MusicInfo & PlaylistSong) => x.filename;
 
 export default function PlaylistView({
   route,
-}: NativeStackScreenProps<PlaylistRouteParams, 'PlaylistView'>) {
+}: NativeStackScreenProps<RootStackParams, 'PlaylistView'>) {
   const {playlists, removeFromPlaylist} = usePlaylists();
   const {addSongs} = useTrackPlayer();
   const {colors} = useTheme();

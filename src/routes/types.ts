@@ -5,14 +5,19 @@ export type PlaylistRouteParams = {
   PlaylistView: {id: number};
 };
 
-export type RootBottomTabsParams = {
+export type BottomTabsParams = {
   Home: undefined;
   Playlists: NavigatorScreenParams<PlaylistRouteParams>;
   Settings: undefined;
 };
 
+export type RootStackParams = {
+  Main: NavigatorScreenParams<BottomTabsParams>;
+  Player: undefined;
+};
+
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootBottomTabsParams {}
+    interface RootParamList extends RootStackParams {}
   }
 }
