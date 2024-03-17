@@ -30,14 +30,27 @@ export default function Player({
     <View
       style={{
         flex: 1,
+        padding: 15,
         flexDirection: 'column',
         backgroundColor: colors.background,
         alignItems: 'center',
       }}>
-      <View style={{height: 40}} />
       <View
         style={{
-          paddingHorizontal: 20,
+          width: '100%',
+          height: 50,
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }}>
+        <IconButton
+          icon="arrow-back"
+          size={24}
+          onPress={() => navigation.goBack()}
+        />
+      </View>
+      <View
+        style={{
           alignItems: 'center',
         }}>
         <FakeAlbumArt iconSize="large" width={width - 20} height={width - 20} />
@@ -48,14 +61,17 @@ export default function Player({
           justifyContent: 'space-evenly',
           flexDirection: 'column',
           alignItems: 'stretch',
-          padding: 16,
         }}>
         <ListItemMainContent style={{fontSize: 16}}>
           {track.title}
         </ListItemMainContent>
         <ProgressIndicator fullScreen />
         <ControlsContainer style={{width: '100%', justifyContent: 'center'}}>
-          <MUIIcon name="skip-previous" size={24} />
+          <MUIIcon
+            onPress={() => TrackPlayer.skipToPrevious()}
+            name="skip-previous"
+            size={28}
+          />
           <Pressable
             onPress={() =>
               state === State.Playing ? TrackPlayer.pause() : TrackPlayer.play()
@@ -68,12 +84,16 @@ export default function Player({
               }}>
               <MUIIcon
                 name={state === State.Playing ? 'pause' : 'play-arrow'}
-                size={30}
+                size={36}
                 color={colors.background}
               />
             </View>
           </Pressable>
-          <IconButton icon="skip-next" size={24} />
+          <IconButton
+            onPress={() => TrackPlayer.skipToNext()}
+            icon="skip-next"
+            size={28}
+          />
         </ControlsContainer>
       </View>
     </View>
