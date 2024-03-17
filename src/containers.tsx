@@ -37,7 +37,7 @@ const makeStyles = (colors: Theme['colors']) =>
     controlsContainer: {
       display: 'flex',
       flexDirection: 'row',
-      alignContent: 'center',
+      alignItems: 'center',
       gap: 16,
     },
     textInput: {

@@ -1,66 +1,30 @@
-import React, {PropsWithChildren, useMemo} from 'react';
+import React, {PropsWithChildren} from 'react';
 import {useTrackPlayer} from '../context/playerContext';
 import {Pressable, Text, View} from 'react-native';
 import TrackPlayer, {
-  RepeatMode,
   State,
   Track,
   useActiveTrack,
   usePlaybackState,
-  useProgress,
 } from 'react-native-track-player';
-import {useNavigation, useTheme} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import IconButton from './IconButton';
 import {ControlsContainer} from '../containers';
 import FakeAlbumArt from './FakeAlbumArt';
-
-const repeatModeIcon: {
-  [key in RepeatMode]: string;
-} = {
-  [RepeatMode.Off]: 'repeat',
-  [RepeatMode.Queue]: 'repeat',
-  [RepeatMode.Track]: 'repeat-one',
-};
+import RepeatIcon from './RepeatIcon';
+import ProgressIndicator from './ProgressIndicator';
 
 type PlayingProps = {
   playing: Track;
 };
 
 function Playing({playing}: PlayingProps) {
-  const {colors} = useTheme();
   const navigation = useNavigation();
-  const progress = useProgress(500);
   const {state: playbackState} = usePlaybackState();
-  const {repeatMode, changeRepeatMode} = useTrackPlayer();
-  const playedPercent = useMemo(() => {
-    return Math.round((progress.position * 100) / progress.duration);
-  }, [progress]);
-  const cycleRepeatMode = () => {
-    if (repeatMode === RepeatMode.Off) {
-      changeRepeatMode(RepeatMode.Queue);
-    } else if (repeatMode === RepeatMode.Queue) {
-      changeRepeatMode(RepeatMode.Track);
-    } else {
-      changeRepeatMode(RepeatMode.Off);
-    }
-  };
+  const trackPlayer = useTrackPlayer();
   return (
     <View>
-      <View
-        style={{
-          height: 4,
-          backgroundColor: colors.border,
-          flexDirection: 'row',
-        }}>
-        <View
-          style={{
-            height: '100%',
-            width: `${playedPercent}%`,
-            backgroundColor: colors.primary,
-          }}
-        />
-        <View style={{height: '100%', width: `${100 - playedPercent}%`}} />
-      </View>
+      <ProgressIndicator />
       <Pressable onPress={() => navigation.navigate('Player')}>
         <View
           style={{
@@ -91,12 +55,7 @@ function Playing({playing}: PlayingProps) {
                   : TrackPlayer.play()
               }
             />
-            <IconButton
-              style={{opacity: repeatMode === RepeatMode.Off ? 0.6 : 1}}
-              icon={repeatModeIcon[repeatMode]}
-              size={24}
-              onPress={cycleRepeatMode}
-            />
+            <RepeatIcon trackPlayer={trackPlayer} />
           </ControlsContainer>
         </View>
       </Pressable>

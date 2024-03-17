@@ -18,17 +18,17 @@ export default function FakeAlbumArt({iconSize, width, height}: Props) {
     if (iconSize === 'medium') {
       return 24;
     }
-    return 36;
+    return 72;
   }, [iconSize]);
   return (
     <View
       style={{
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.card,
+        backgroundColor: colors.border,
         width: width ?? size * 2,
         height: height ?? size * 2,
-        borderRadius: 5
+        borderRadius: 5,
       }}>
       <MUIIcon name="music-note" size={size} color={colors.text} />
     </View>
