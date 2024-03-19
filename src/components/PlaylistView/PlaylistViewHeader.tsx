@@ -25,9 +25,10 @@ function HeaderLeft({
 }: Props) {
   if (selected.size > 0) {
     return (
-      <Text style={{fontSize: 18, fontWeight: '600'}}>
-        {selected.size} selected
-      </Text>
+      <View>
+        <Text style={{fontWeight: 'bold'}}>{selected.size} selected</Text>
+        <Text style={{opacity: 0.6}}>Out of {playlist.songs.length}</Text>
+      </View>
     );
   }
   if (editingFilter) {
@@ -70,7 +71,7 @@ function HeaderRight({
         icon="search"
         size={24}
       />
-      <IconButton icon="shuffle" size={20} onPress={playRandomQueue} />
+      <IconButton icon="shuffle" size={24} onPress={playRandomQueue} />
     </ControlsContainer>
   );
 }

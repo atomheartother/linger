@@ -38,7 +38,7 @@ const makeStyles = (colors: Theme['colors']) =>
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 16,
+      gap: 8,
     },
     textInput: {
       borderWidth: 1,

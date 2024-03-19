@@ -10,6 +10,8 @@ type Props = PressableProps & {
   color?: keyof Theme['colors'];
 };
 
+const ICON_PADDING = 5;
+
 export default function IconButton({
   icon,
   size,
@@ -19,8 +21,10 @@ export default function IconButton({
   const {colors} = useTheme();
   return (
     <View style={{borderRadius: size, overflow: 'hidden'}}>
-      <Pressable android_ripple={{radius: size}} {...touchableProps}>
-        <View style={{padding: 2}}>
+      <Pressable
+        android_ripple={{radius: size + ICON_PADDING}}
+        {...touchableProps}>
+        <View style={{padding: ICON_PADDING}}>
           <MUIIcon name={icon} size={size} color={color && colors[color]} />
         </View>
       </Pressable>
