@@ -7,8 +7,11 @@ import {UseSelectData} from '../../hooks/useSelect';
 import type useFilters from '../../hooks/useFilters';
 import SearchBar from '../SearchBar';
 import {ControlsContainer} from '../../containers';
+import {MusicInfo} from '../../context/songsContext';
+import {PlaylistSong} from '../../context/playlistsContext';
+import {useStats} from '../../context/stats';
 
-type Props = ReturnType<typeof useFilters> &
+type Props = ReturnType<typeof useFilters<MusicInfo & PlaylistSong>> &
   Pick<UseSelectData, 'all' | 'none' | 'invert'> & {
     selected: Set<string>;
     playlist: Playlist;
@@ -23,6 +26,7 @@ function HeaderLeft({
   setQuery,
   setEditingFilter,
 }: Props) {
+  const {playStats} = useStats();
   if (selected.size > 0) {
     return (
       <View>
@@ -43,7 +47,15 @@ function HeaderLeft({
   return (
     <View>
       <Text style={{fontWeight: 'bold'}}>{playlist.name}</Text>
-      <Text style={{opacity: 0.6}}>{playlist.songs.length} songs</Text>
+      <Text style={{opacity: 0.6}}>
+        {playlist.songs.length} songs
+        {' - '}
+        {playlist.songs.reduce(
+          (acc, curr) => acc + (playStats[curr.uri]?.playCount ?? 0),
+          0,
+        )}{' '}
+        total plays
+      </Text>
     </View>
   );
 }
