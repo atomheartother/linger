@@ -20,10 +20,11 @@ const Home: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: colors.background,
+          paddingHorizontal: '12%',
         }}>
         <Text style={{marginBottom: 20, textAlign: 'center'}}>
-          It looks like you haven't set a directory yet and I can't see any
-          music :(
+          Looks like you haven't set a directory yet and I can't see any music
+          :(
         </Text>
         <LingerButton onPress={promptForDir} title="Select music directory" />
       </View>
