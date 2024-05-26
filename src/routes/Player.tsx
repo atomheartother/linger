@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParams} from './types';
 import {Pressable, View, useWindowDimensions} from 'react-native';
@@ -14,14 +14,19 @@ import {ListItemMainContent} from '../texts';
 import ProgressIndicator from '../components/ProgressIndicator';
 import {ControlsContainer} from '../containers';
 import IconButton from '../components/IconButton';
+import Dialog from '../components/Dialog';
+import SleepEdit from '../components/SleepEdit';
+import {useTrackPlayer} from '../context/playerContext';
 
 export default function Player({
   navigation,
 }: NativeStackScreenProps<RootStackParams>) {
   const {colors} = useTheme();
+  const {sleepDate, setSleepDate} = useTrackPlayer();
   const {width} = useWindowDimensions();
   const track = useActiveTrack();
   const {state} = usePlaybackState();
+  const [sleepModal, setSleepModal] = useState(false);
 
   if (!track) {
     return null;
@@ -40,13 +45,18 @@ export default function Player({
           width: '100%',
           height: 50,
           flexDirection: 'row',
-          justifyContent: 'flex-start',
+          justifyContent: 'space-between',
           alignItems: 'center',
         }}>
         <IconButton
           icon="arrow-back"
           size={24}
           onPress={() => navigation.goBack()}
+        />
+        <IconButton
+          icon={sleepDate ? 'timer-off' : 'timer'}
+          size={24}
+          onPress={() => (sleepDate ? setSleepDate(null) : setSleepModal(true))}
         />
       </View>
       <View
@@ -96,6 +106,9 @@ export default function Player({
           />
         </ControlsContainer>
       </View>
+      <Dialog visible={sleepModal} onRequestClose={() => setSleepModal(false)}>
+        <SleepEdit close={() => setSleepModal(false)} />
+      </Dialog>
     </View>
   );
 }

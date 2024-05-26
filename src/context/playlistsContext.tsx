@@ -7,9 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {MMKV} from 'react-native-mmkv';
-
-const storage = new MMKV();
+import storage from '../utils/storage';
 
 export type PlaylistSong = {
   uri: string;
